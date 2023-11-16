@@ -1,9 +1,0 @@
-{
-"cmake.configureArgs": [
-"-DLF_REACTION_GRAPH_BREADTH=18",
-"-DLF_THREADED=1",
-"-DNUMBER_OF_WORKERS=0",
-"-DSCHEDULER=SCHED_NP",
-"-DLOG_LEVEL=2"
-]
-}

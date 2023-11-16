@@ -1,6 +1,6 @@
 import time
 import numpy as np
-import gymnasium as gym
+import gym
 import copy
 import LinguaFrancasample_efficiency as lf
 from LinguaFrancasample_efficiency import (
@@ -25,55 +25,52 @@ except ModuleNotFoundError:
           "Install using \"pip3 install LinguaFrancaBase\".")
     sys.exit(1)
 
-os.environ["OMP_NUM_THREADS"] = "1"
-os.environ["MKL_NUM_THREADS"] = "1"
-
 # From the preamble, verbatim:
 
 # Configuration parameters
-NUM_ENVS = 16
+NUM_ENVS = 31
 NUM_STEPS = 5000
 # End of preamble.
 # From the preamble, verbatim:
 
 # Configuration parameters
-NUM_ENVS = 16
+NUM_ENVS = 31
 NUM_STEPS = 5000
 # End of preamble.
 # From the preamble, verbatim:
 
 # Configuration parameters
-NUM_ENVS = 16
+NUM_ENVS = 31
 NUM_STEPS = 5000
 # End of preamble.
 # From the preamble, verbatim:
 
 # Configuration parameters
-NUM_ENVS = 16
+NUM_ENVS = 31
 NUM_STEPS = 5000
 # End of preamble.
 # From the preamble, verbatim:
 
 # Configuration parameters
-NUM_ENVS = 16
+NUM_ENVS = 31
 NUM_STEPS = 5000
 # End of preamble.
 # From the preamble, verbatim:
 
 # Configuration parameters
-NUM_ENVS = 16
+NUM_ENVS = 31
 NUM_STEPS = 5000
 # End of preamble.
 # From the preamble, verbatim:
 
 # Configuration parameters
-NUM_ENVS = 16
+NUM_ENVS = 31
 NUM_STEPS = 5000
 # End of preamble.
 # From the preamble, verbatim:
 
 # Configuration parameters
-NUM_ENVS = 16
+NUM_ENVS = 31
 NUM_STEPS = 10000
 # End of preamble.
 
@@ -100,8 +97,8 @@ class __envreactor:
     def __init__(self, **kwargs):
         # Define parameters and their default values
         # Handle parameters that are set in instantiation
-        self.env = gym.make("CartPole-v1")
         self.__dict__.update(kwargs)
+        self.env = gym.make("Blackjack-v1")
         # Define state variables
 
     @property
@@ -109,8 +106,7 @@ class __envreactor:
         return self._bank_index  # pylint: disable=no-member
 
     def reaction_function_0(self):
-
-        self.env.reset()
+        self.env.reset(seed=123, options={})
         return 0
 
     def reaction_function_1(self, seed, infos):
@@ -119,7 +115,7 @@ class __envreactor:
         result = self.env.step(policy.integers(0, 2))
 
         if result[2] or result[3]:
-            self.env.reset()
+            self.env.reset(seed=123, options={})
 
         infos.set(result)
         return 0
@@ -197,7 +193,7 @@ class ___lf_gendelay_0:
 
 # Instantiate classes
 sample_efficiency_main_lf = [None] * 1
-sample_efficiency_client_lf = [None] * 16
+sample_efficiency_client_lf = [None] * 31
 sample_efficiency_server_lf = [None] * 1
 sample_efficiency_delay_lf = [None] * 1
 # Start initializing sample_efficiency of class _sample_efficiency_main
@@ -207,7 +203,7 @@ for sample_efficiency_main_i in range(1):
         _bank_index=0,
     )
     # Start initializing sample_efficiency.client of class _envreactor
-    for sample_efficiency_client_i in range(16):
+    for sample_efficiency_client_i in range(31):
         bank_index = sample_efficiency_client_i
         sample_efficiency_client_lf[sample_efficiency_client_i] = __envreactor(
             _bank_index=sample_efficiency_client_i,
