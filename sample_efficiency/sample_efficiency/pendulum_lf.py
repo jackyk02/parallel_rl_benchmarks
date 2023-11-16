@@ -71,7 +71,7 @@ NUM_STEPS = 5000
 
 # Configuration parameters
 NUM_ENVS = 16
-NUM_STEPS = 5000
+NUM_STEPS = 10000
 os.environ['OPENBLAS_NUM_THREADS'] = '1'
 # End of preamble.
 

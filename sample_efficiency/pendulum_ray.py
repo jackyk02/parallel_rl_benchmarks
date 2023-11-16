@@ -2,6 +2,9 @@ import ray
 import gym
 import numpy as np
 import time
+import os
+os.environ['OPENBLAS_NUM_THREADS'] = '1'
+
 
 # Initialize Ray without logging.
 ray.init(configure_logging=False, log_to_driver=False)
