@@ -28,7 +28,7 @@ class RolloutWorker:
         """
         Takes a step in the environment using a random policy based on the provided seed.
         """
-        policy = np.random.default_rng(seed.value)
+        policy = np.random.default_rng(seed)
         action = policy.uniform(low=-2.0, high=2.0, size=(1,))
         result = self.env.step(action)
 
