@@ -1,0 +1,14 @@
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/workers8/build/CMakeFiles/LinguaFrancaworkers8.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/workers8/build/CMakeFiles/edit_cache.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/workers8/build/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/workers8/build/CMakeFiles/list_install_components.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/workers8/build/CMakeFiles/install.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/workers8/build/CMakeFiles/install/local.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/workers8/build/CMakeFiles/install/strip.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/workers8/build/core/CMakeFiles/core.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/workers8/build/core/CMakeFiles/edit_cache.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/workers8/build/core/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/workers8/build/core/CMakeFiles/list_install_components.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/workers8/build/core/CMakeFiles/install.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/workers8/build/core/CMakeFiles/install/local.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/workers8/build/core/CMakeFiles/install/strip.dir

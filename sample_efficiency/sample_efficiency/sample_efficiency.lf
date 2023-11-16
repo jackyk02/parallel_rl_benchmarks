@@ -1,0 +1,74 @@
+target Python {
+  threading: True
+}
+
+preamble {=
+  import gym
+  import numpy as np
+  import time
+
+  # Configuration parameters
+  NUM_ENVS = 16
+  NUM_STEPS = 5000
+=}
+
+reactor EnvReactor {
+  input seed
+  output infos
+
+  reaction(startup) {=
+    self.env = gym.make("CartPole-v1")
+    self.env.reset()
+  =}
+
+  reaction(seed) -> infos {=
+    policy = np.random.default_rng(seed.value)
+    result = self.env.step(policy.integers(0, 2))
+
+    if result[2] or result[3]:
+        self.env.reset()
+
+    infos.set(result)
+  =}
+}
+
+reactor serverReactor {
+  output seed
+  input[16] infos
+  state step_num
+  state start_time
+
+  reaction(startup) -> seed {=
+    self.step_num = 0
+    seed.set(self.step_num)
+  =}
+
+  reaction(infos) -> seed {=
+    if self.step_num == 1:
+        self.start_time = time.time()
+
+    if self.step_num == NUM_STEPS:
+        end_time = time.time()
+        print(f"Total time taken: {end_time - self.start_time:.2f} seconds")
+        request_stop()
+
+    # Perform a step in each environment using the current step number as seed
+    print(f"Step: {self.step_num + 1}")
+
+    for i in range(16):
+        temp = infos[i].value
+        print(f"Env {i + 1}: Observations={temp[0]}, Reward={temp[1]}, Terminated={temp[2]}")
+
+    print("\n")
+
+    self.step_num+=1
+    seed.set(self.step_num)
+  =}
+}
+
+main reactor {
+  client = new[16] EnvReactor()
+  server = new serverReactor()
+  (server.seed)+ -> client.seed after 0
+  client.infos -> server.infos
+}
