@@ -31,12 +31,15 @@ class RolloutWorker:
         observations, rewards, terminations = [], [], []
 
         terminated = False
-        while not terminated:
+        max_steps = 200  # Define a maximum number of steps per episode
+        step_count = 0   # Initialize step counter
+        while not terminated and step_count < max_steps:
             action = policy.uniform(low=-2.0, high=2.0, size=(1,))
-            obs, reward, terminated, truncated, infos = self.env.step(action)
+            obs, reward, terminated, truncated, _ = self.env.step(action)
             observations.append(obs)
             rewards.append(reward)
             terminations.append(terminated)
+            step_count += 1  # Increment step counter
 
         # Reset environment for next episode
         self.env.reset(seed=123, options={})

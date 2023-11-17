@@ -1,13 +1,14 @@
-import time
-import numpy as np
-import gym
-import copy
-import LinguaFrancasample_batch as lf
+import os
 from LinguaFrancasample_batch import (
     Tag, action_capsule_t, port_capsule, request_stop, schedule_copy, start
 )
-import os
+import LinguaFrancasample_batch as lf
+import copy
+import gym
 import sys
+import time
+import numpy as np
+
 sys.path.append(os.path.dirname(__file__))
 # List imported names, but do not use pylint's --extension-pkg-allow-list option
 # so that these names will be assumed present without having to compile and install.
@@ -99,12 +100,16 @@ class __envreactor:
         observations, rewards, terminations = [], [], []
 
         terminated = False
-        while not terminated:
+
+        max_steps = 200  # Define a maximum number of steps per episode
+        step_count = 0   # Initialize step counter
+        while not terminated and step_count < max_steps:
             action = policy.uniform(low=-2.0, high=2.0, size=(1,))
             obs, reward, terminated, truncated, _ = self.env.step(action)
             observations.append(obs)
             rewards.append(reward)
             terminations.append(terminated)
+            step_count += 1  # Increment step counter
 
         self.env.reset(seed=123, options={})
         end_time = time.time()
