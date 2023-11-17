@@ -55,7 +55,7 @@ NUM_EPISODES = 10000
 # End of preamble.
 # From the preamble, verbatim:
 
-NUM_EPISODES = 10000
+NUM_EPISODES = 5000
 # End of preamble.
 
 
@@ -82,7 +82,7 @@ class __envreactor:
         # Define parameters and their default values
         # Handle parameters that are set in instantiation
         self.__dict__.update(kwargs)
-        self.env = gym.make("CartPole-v1")
+        self.env = gym.make("Pendulum-v1")
         # Define state variables
 
     @property
@@ -90,25 +90,26 @@ class __envreactor:
         return self._bank_index  # pylint: disable=no-member
 
     def reaction_function_0(self):
-
         self.env.reset(seed=123, options={})
         return 0
 
     def reaction_function_1(self, seed, infos):
-
+        start_time = time.time()
         policy = np.random.default_rng(seed.value)
         observations, rewards, terminations = [], [], []
 
         terminated = False
         while not terminated:
-            action = policy.integers(0, 2)
+            action = policy.uniform(low=-2.0, high=2.0, size=(1,))
             obs, reward, terminated, truncated, _ = self.env.step(action)
             observations.append(obs)
             rewards.append(reward)
             terminations.append(terminated)
 
         self.env.reset(seed=123, options={})
+        end_time = time.time()
         infos.set((observations, rewards, terminations))
+        print(f"Time taken: {(end_time - start_time)*1000:.4f} ms")
         return 0
 
 # Python class for reactor _serverreactor
@@ -150,9 +151,8 @@ class __serverreactor:
         print(f"Episode: {self.episode_num + 1}")
 
         for i in range(30):
-            temp = infos[i].value
-            print(
-                f"Env {i + 1}: Observations={temp[0]}, Reward={temp[1]}, Terminated={temp[2]}")
+            observations = infos[i].value[0]
+            print(f"Env {i + 1}: Number of Observations = {len(observations)}")
 
         print("\n")
 
