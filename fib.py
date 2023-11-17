@@ -1,9 +1,10 @@
 import sys
-from concurrent.futures import ThreadPoolExecutor
 import time
+from concurrent.futures import ThreadPoolExecutor
+import psutil
 
 # Define the constant
-FIB_NUMBER = 36
+FIB_NUMBER = 37
 
 print(f"nogil={getattr(sys.flags, 'nogil', False)}")
 
@@ -22,11 +23,20 @@ def timed_fib(n):
     return result
 
 
+def set_affinity():
+    # Set the thread affinity to the specified cores
+    cores = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30]
+    p = psutil.Process()  # get current process
+    p.cpu_affinity(cores)  # set the process to the specified cores
+
+
 start_time = time.time()
 
 threads = 8
 if len(sys.argv) > 1:
     threads = int(sys.argv[1])
+
+# set_affinity()
 
 with ThreadPoolExecutor(max_workers=threads) as executor:
     futures = [executor.submit(timed_fib, FIB_NUMBER) for _ in range(threads)]

@@ -6,10 +6,10 @@ import os
 os.environ['OPENBLAS_NUM_THREADS'] = '1'
 
 # Initialize Ray without logging.
-ray.init(configure_logging=False, log_to_driver=False)
+ray.init(configure_logging=False, log_to_driver=False, num_cpus=17)
 
 # Configuration parameters
-NUM_ENVS = 31
+NUM_ENVS = 15
 NUM_STEPS = 10000
 
 

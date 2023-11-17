@@ -28,49 +28,49 @@ except ModuleNotFoundError:
 # From the preamble, verbatim:
 
 # Configuration parameters
-NUM_ENVS = 31
-NUM_STEPS = 5000
+NUM_ENVS = 15
+NUM_STEPS = 10000
 # End of preamble.
 # From the preamble, verbatim:
 
 # Configuration parameters
-NUM_ENVS = 31
-NUM_STEPS = 5000
+NUM_ENVS = 15
+NUM_STEPS = 10000
 # End of preamble.
 # From the preamble, verbatim:
 
 # Configuration parameters
-NUM_ENVS = 31
-NUM_STEPS = 5000
+NUM_ENVS = 15
+NUM_STEPS = 10000
 # End of preamble.
 # From the preamble, verbatim:
 
 # Configuration parameters
-NUM_ENVS = 31
-NUM_STEPS = 5000
+NUM_ENVS = 15
+NUM_STEPS = 10000
 # End of preamble.
 # From the preamble, verbatim:
 
 # Configuration parameters
-NUM_ENVS = 31
-NUM_STEPS = 5000
+NUM_ENVS = 15
+NUM_STEPS = 10000
 # End of preamble.
 # From the preamble, verbatim:
 
 # Configuration parameters
-NUM_ENVS = 31
-NUM_STEPS = 5000
+NUM_ENVS = 15
+NUM_STEPS = 10000
 # End of preamble.
 # From the preamble, verbatim:
 
 # Configuration parameters
-NUM_ENVS = 31
-NUM_STEPS = 5000
+NUM_ENVS = 15
+NUM_STEPS = 10000
 # End of preamble.
 # From the preamble, verbatim:
 
 # Configuration parameters
-NUM_ENVS = 31
+NUM_ENVS = 15
 NUM_STEPS = 10000
 # End of preamble.
 
@@ -97,8 +97,8 @@ class __envreactor:
     def __init__(self, **kwargs):
         # Define parameters and their default values
         # Handle parameters that are set in instantiation
-        self.__dict__.update(kwargs)
         self.env = gym.make("Pendulum-v1")
+        self.__dict__.update(kwargs)
         # Define state variables
 
     @property
@@ -106,7 +106,8 @@ class __envreactor:
         return self._bank_index  # pylint: disable=no-member
 
     def reaction_function_0(self):
-        self.env.reset(seed=123, options={})
+
+        self.env.reset()
         return 0
 
     def reaction_function_1(self, seed, infos):
@@ -116,7 +117,7 @@ class __envreactor:
         result = self.env.step(action)
 
         if result[2] or result[3]:
-            self.env.reset(seed=123, options={})
+            self.env.reset()
 
         infos.set(result)
         return 0
@@ -159,7 +160,7 @@ class __serverreactor:
         # Perform a step in each environment using the current step number as seed
         print(f"Step: {self.step_num + 1}")
 
-        for i in range(16):
+        for i in range(15):
             temp = infos[i].value
             print(
                 f"Env {i + 1}: Observations={temp[0]}, Reward={temp[1]}, Terminated={temp[2]}")
@@ -194,7 +195,7 @@ class ___lf_gendelay_0:
 
 # Instantiate classes
 sample_efficiency_main_lf = [None] * 1
-sample_efficiency_client_lf = [None] * 31
+sample_efficiency_client_lf = [None] * 15
 sample_efficiency_server_lf = [None] * 1
 sample_efficiency_delay_lf = [None] * 1
 # Start initializing sample_efficiency of class _sample_efficiency_main
@@ -204,7 +205,7 @@ for sample_efficiency_main_i in range(1):
         _bank_index=0,
     )
     # Start initializing sample_efficiency.client of class _envreactor
-    for sample_efficiency_client_i in range(31):
+    for sample_efficiency_client_i in range(15):
         bank_index = sample_efficiency_client_i
         sample_efficiency_client_lf[sample_efficiency_client_i] = __envreactor(
             _bank_index=sample_efficiency_client_i,
