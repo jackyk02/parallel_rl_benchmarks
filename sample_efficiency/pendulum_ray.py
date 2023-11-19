@@ -21,7 +21,7 @@ class RolloutWorker:
     """
 
     def __init__(self):
-        self.env = gym.make("Pendulum-v1")
+        self.env = gym.make("Pendulum-v0")
         self.env.reset(seed=123, options={})
 
     def step(self, seed):

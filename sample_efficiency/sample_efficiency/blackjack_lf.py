@@ -97,7 +97,7 @@ class __envreactor:
     def __init__(self, **kwargs):
         # Define parameters and their default values
         # Handle parameters that are set in instantiation
-        self.env = gym.make("Blackjack-v1")
+        self.env = gym.make("Blackjack-v0")
         self.__dict__.update(kwargs)
         # Define state variables
 

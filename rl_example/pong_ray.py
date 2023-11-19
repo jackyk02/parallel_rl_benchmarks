@@ -224,13 +224,13 @@ for i in range(1, 1 + iterations):
     if int(round_num) == 0:
         start_time = time.time()
 
-    # time diff
-    elapsed_time = time.time() - start_time
-    print(f"Training time: {elapsed_time:.4f} seconds")
-
     # print round number
     print("Round: "+str(round_num))
     round_num += 1
+
+    # time diff
+    elapsed_time = time.time() - start_time
+    print(f"Training time: {elapsed_time:.4f} seconds")
 
     # print running reward
     print("Reward: " + str(running_reward) + " \n")

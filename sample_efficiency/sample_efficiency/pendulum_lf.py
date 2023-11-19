@@ -97,7 +97,7 @@ class __envreactor:
     def __init__(self, **kwargs):
         # Define parameters and their default values
         # Handle parameters that are set in instantiation
-        self.env = gym.make("Pendulum-v1")
+        self.env = gym.make("Pendulum-v0")
         self.__dict__.update(kwargs)
         # Define state variables
 

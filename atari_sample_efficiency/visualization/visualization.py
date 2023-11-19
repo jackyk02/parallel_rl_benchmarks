@@ -3,12 +3,12 @@ import numpy as np
 
 # Data
 frameworks = ["Ray", "LF"]
-environments = ["Cartpole", "Blackjack", "Pendulum"]
+environments = ["Pacman", "Pong", "SpaceInvader"]
 
 # Number of games per second for each framework and environment
 games_per_second = [
-    [3276.539974, 5510.653931, 3223.726628],  # Ray
-    [3813.882532, 7466.401195, 3646.086534],  # LF
+    [75, 75.86869658, 74.79804528],  # Ray
+    [884.4339623, 877.706261, 860.0917431],  # LF
 ]
 
 # Bar chart settings
@@ -30,7 +30,7 @@ middle_positions = index + \
 # Labeling the axes, giving a title, and adjusting ticks for better visualization
 plt.xlabel("Environment")
 plt.ylabel("Observations per Second")
-plt.title("Performance Comparison of Ray and LF on OpenAI Environments")
+plt.title("Performance Comparison of Ray and LF on Atari Environments")
 plt.xticks(middle_positions, environments)
 
 # Displaying the legend
