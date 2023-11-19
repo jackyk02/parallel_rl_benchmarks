@@ -1,0 +1,14 @@
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/sample_efficiency/build/CMakeFiles/LinguaFrancasample_efficiency.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/sample_efficiency/build/CMakeFiles/edit_cache.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/sample_efficiency/build/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/sample_efficiency/build/CMakeFiles/list_install_components.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/sample_efficiency/build/CMakeFiles/install.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/sample_efficiency/build/CMakeFiles/install/local.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/sample_efficiency/build/CMakeFiles/install/strip.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/sample_efficiency/build/core/CMakeFiles/core.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/sample_efficiency/build/core/CMakeFiles/edit_cache.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/sample_efficiency/build/core/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/sample_efficiency/build/core/CMakeFiles/list_install_components.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/sample_efficiency/build/core/CMakeFiles/install.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/sample_efficiency/build/core/CMakeFiles/install/local.dir
+/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/sample_efficiency/build/core/CMakeFiles/install/strip.dir
