@@ -196,7 +196,7 @@ LF_FILE_SEPARATOR:UNINITIALIZED="/"
 LF_PACKAGE_DIRECTORY:UNINITIALIZED="/mnt/c/Users/jacky/Desktop/simple_multi"
 
 //No help, variable specified on the command line.
-LF_REACTION_GRAPH_BREADTH:UNINITIALIZED=5
+LF_REACTION_GRAPH_BREADTH:UNINITIALIZED=8
 
 //No help, variable specified on the command line.
 LF_SOURCE_DIRECTORY:UNINITIALIZED="/mnt/c/Users/jacky/Desktop/simple_multi/src"

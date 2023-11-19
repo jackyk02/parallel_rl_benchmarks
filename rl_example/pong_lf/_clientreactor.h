@@ -23,9 +23,9 @@ int lf_reactor_c_main(int argc, const char* argv[]);
 #include "include/core/environment.h"
 int lf_reactor_c_main(int argc, const char* argv[]);
 #include "pythontarget.h"
-#line 131 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+#line 145 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
 typedef generic_port_instance_struct _clientreactor_global_parameters_t;
-#line 132 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+#line 146 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
 typedef generic_port_instance_struct _clientreactor_updated_parameters_t;
 typedef struct {
     struct self_base_t base;
@@ -33,31 +33,31 @@ typedef struct {
     PyObject* _lf_py_reaction_function_0;
     PyObject* _lf_py_reaction_function_1;
     
-    #line 133 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+    #line 147 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
     PyObject* env;
-    #line 131 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+    #line 145 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
     _clientreactor_global_parameters_t* _lf_global_parameters;
-    #line 131 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+    #line 145 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
     // width of -2 indicates that it is not a multiport.
-    #line 131 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+    #line 145 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
     int _lf_global_parameters_width;
-    #line 131 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+    #line 145 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
     // Default input (in case it does not get connected)
-    #line 131 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+    #line 145 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
     _clientreactor_global_parameters_t _lf_default__global_parameters;
-    #line 132 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+    #line 146 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
     _clientreactor_updated_parameters_t _lf_updated_parameters;
-    #line 132 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+    #line 146 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
     int _lf_updated_parameters_width;
-    #line 135 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+    #line 149 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
     reaction_t _lf__reaction_0;
-    #line 140 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+    #line 154 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
     reaction_t _lf__reaction_1;
     trigger_t _lf__startup;
     reaction_t* _lf__startup_reactions[1];
-    #line 131 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+    #line 145 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
     trigger_t _lf__global_parameters;
-    #line 131 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+    #line 145 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
     reaction_t* _lf__global_parameters_reactions[1];
     #ifdef FEDERATED
     

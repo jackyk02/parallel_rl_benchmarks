@@ -24,8 +24,8 @@ typedef struct clientreactor_self_t{
     PyObject* env;
     int end[0]; // placeholder; MSVC does not compile empty structs
 } clientreactor_self_t;
-#line 131 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+#line 145 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
 typedef generic_port_instance_struct _clientreactor_global_parameters_t;
-#line 132 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+#line 146 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
 typedef generic_port_instance_struct _clientreactor_updated_parameters_t;
 #endif

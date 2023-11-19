@@ -30,8 +30,8 @@ typedef struct serverreactor_self_t{
     PyObject* weights;
     int end[0]; // placeholder; MSVC does not compile empty structs
 } serverreactor_self_t;
-#line 180 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+#line 206 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
 typedef generic_port_instance_struct _serverreactor_updated_parameters_t;
-#line 179 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
+#line 205 "/mnt/c/Users/jacky/Desktop/simple_multi/src/pong_lf.lf"
 typedef generic_port_instance_struct _serverreactor_global_parameters_t;
 #endif
