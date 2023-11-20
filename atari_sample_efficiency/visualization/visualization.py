@@ -30,7 +30,7 @@ middle_positions = index + \
 # Labeling the axes, giving a title, and adjusting ticks for better visualization
 plt.xlabel("Environment")
 plt.ylabel("Observations per Second")
-plt.title("Performance Comparison of Ray and LF on Atari Environments")
+plt.title("Throughput of Ray and LF on Atari Environments")
 plt.xticks(middle_positions, environments)
 
 # Displaying the legend

@@ -9,7 +9,7 @@ os.environ["OMP_NUM_THREADS"] = "1"
 os.environ["MKL_NUM_THREADS"] = "1"
 
 
-H = 200  # The number of hidden layer neurons.
+H = 800  # The number of hidden layer neurons.
 gamma = 0.99  # The discount factor for reward.
 decay_rate = 0.99  # The decay factor for RMSProp leaky sum of grad^2.
 D = 80 * 80  # The input dimensionality: 80x80 grid.
@@ -95,40 +95,55 @@ def rollout(model, env):
 
 
 class Model(object):
-    """This class holds the neural network weights."""
+    """This class holds the neural network weights for a 6-layer network."""
 
     def __init__(self):
         np.random.seed(SEED)
         self.weights = {}
-        np.random.seed(seed=100)
+        # Initialize weights for each layer
         self.weights["W1"] = np.random.randn(H, D) / np.sqrt(D)
-        self.weights["W2"] = np.random.randn(H) / np.sqrt(H)
-        np.random.seed(seed=None)
+        self.weights["W2"] = np.random.randn(H, H) / np.sqrt(H)  # New layer
+        self.weights["W3"] = np.random.randn(H, H) / np.sqrt(H)  # New layer
+        self.weights["W4"] = np.random.randn(H, H) / np.sqrt(H)  # New layer
+        self.weights["W5"] = np.random.randn(H, H) / np.sqrt(H)  # New layer
+        self.weights["W6"] = np.random.randn(H) / np.sqrt(H)     # Output layer
 
     def policy_forward(self, x):
-        h = np.dot(self.weights["W1"], x)
-        h[h < 0] = 0  # ReLU nonlinearity.
-        logp = np.dot(self.weights["W2"], h)
-        # Softmax
+        h1 = np.dot(self.weights["W1"], x)
+        h1[h1 < 0] = 0  # ReLU nonlinearity
+        h2 = np.dot(self.weights["W2"], h1)
+        h2[h2 < 0] = 0
+        h3 = np.dot(self.weights["W3"], h2)
+        h3[h3 < 0] = 0
+        h4 = np.dot(self.weights["W4"], h3)
+        h4[h4 < 0] = 0
+        h5 = np.dot(self.weights["W5"], h4)
+        h5[h5 < 0] = 0
+        logp = np.dot(self.weights["W6"], h5)
         p = 1.0 / (1.0 + np.exp(-logp))
-        # Return probability of taking action 2, and hidden state.
-        return p, h
+        return p, h5  # Return last hidden state
 
     def policy_backward(self, eph, epx, epdlogp):
-        """Backward pass to calculate gradients.
+        """Backward pass to calculate gradients."""
 
-        Arguments:
-            eph: Array of intermediate hidden states.
-            epx: Array of experiences (observations).
-            epdlogp: Array of logps (output of last layer before softmax).
+        dW6 = np.dot(eph.T, epdlogp).ravel()
+        dh5 = np.outer(epdlogp, self.weights['W6'])
+        dh5[eph <= 0] = 0
+        dW5 = np.dot(eph.T, dh5)
+        dh4 = np.dot(dh5, self.weights['W5'].T)
+        dh4[eph <= 0] = 0
+        dW4 = np.dot(eph.T, dh4)
+        dh3 = np.dot(dh4, self.weights['W4'].T)
+        dh3[eph <= 0] = 0
+        dW3 = np.dot(eph.T, dh3)
+        dh2 = np.dot(dh3, self.weights['W3'].T)
+        dh2[eph <= 0] = 0
+        dW2 = np.dot(eph.T, dh2)
+        dh1 = np.dot(dh2, self.weights['W2'].T)
+        dh1[eph <= 0] = 0
+        dW1 = np.dot(epx.T, dh1)
 
-        """
-        dW2 = np.dot(eph.T, epdlogp).ravel()
-        dh = np.outer(epdlogp, self.weights["W2"])
-        # Backprop relu.
-        dh[eph <= 0] = 0
-        dW1 = np.dot(dh.T, epx)
-        return {"W1": dW1, "W2": dW2}
+        return {'W6': dW6, 'W5': dW5, 'W4': dW4, 'W3': dW3, 'W2': dW2, 'W1': dW1}
 
     def update(self, grad_buffer, rmsprop_cache, lr, decay):
         """Applies the gradients to the model parameters with RMSProp."""
@@ -211,6 +226,7 @@ for i in range(1, 1 + iterations):
         grad, reward_sum = ray.get(grad_id)
         # Accumulate the gradient over batch.
         for k in model.weights:
+            grad[k] = grad[k].T
             grad_buffer[k] += grad[k]
         running_reward = (
             reward_sum
