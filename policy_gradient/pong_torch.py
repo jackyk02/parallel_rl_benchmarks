@@ -10,7 +10,7 @@ H = 100  # Number of hidden layer neurons
 D = 80 * 80  # Input dimensionality: 80x80 grid
 gamma = 0.99  # Discount factor for reward
 learning_rate = 1e-4  # Learning rate
-batch_size = 3  # Batch size for training
+batch_size = 16  # Batch size for training
 iterations = 1000  # Number of training iterations
 SEED = 42  # Seed for reproducibility
 
@@ -28,7 +28,7 @@ def preprocess(img):
     img[img == 144] = 0  # Erase background (type 1)
     img[img == 109] = 0  # Erase background (type 2)
     img[img != 0] = 1  # Everything else (paddles, ball) just set to 1
-    return img.astype(np.float64).ravel()  # Changed np.float to np.float64
+    return img.astype(np.float64).ravel()
 
 
 class PolicyNetwork(torch.nn.Module):

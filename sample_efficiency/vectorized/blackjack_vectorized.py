@@ -3,14 +3,14 @@ import numpy as np
 import time
 
 NUM_STEPS = 10000
-NUM_ENVS = 31
+NUM_ENVS = 16
 
 
 class RolloutWorker:
     def __init__(self, num_envs):
         self.num_envs = num_envs
         self.env = gym.vector.make("Blackjack-v1", num_envs=num_envs)
-        self.env.reset(seed=123)
+        self.env.reset(seed=123, options={})
 
     def step(self, seeds):
         policies = np.random.default_rng(
@@ -28,7 +28,7 @@ for step_num in range(NUM_STEPS):
         start_time = time.time()
     print(f"Step: {step_num + 1}")
     seeds = np.full(NUM_ENVS, step_num)  # You can customize this as needed
-    observations, rewards, terminated, truncated, info = env.step(seeds)
+    observations, rewards, terminated, info = env.step(seeds)
     print(
         f"Observations={observations}, Rewards={rewards}, Terminated={terminated}")
     print("\n")
