@@ -1,22 +1,24 @@
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
-Change Dir: /mnt/c/Users/jacky/Desktop/simple_multi/src-gen/trafficv4/build/CMakeFiles/CMakeScratch/TryCompile-WpMRMy
+Change Dir: /mnt/c/Users/jacky/Desktop/simple_multi/src-gen/trafficv4/build/CMakeFiles/CMakeScratch/TryCompile-vb9uU6
 
-Run Build Command(s):/usr/bin/make -f Makefile cmTC_ceffd/fast && /usr/bin/make  -f CMakeFiles/cmTC_ceffd.dir/build.make CMakeFiles/cmTC_ceffd.dir/build
-make[1]: Entering directory '/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/trafficv4/build/CMakeFiles/CMakeScratch/TryCompile-WpMRMy'
-Building C object CMakeFiles/cmTC_ceffd.dir/src.c.o
-/usr/bin/gcc -DCMAKE_HAVE_LIBC_PTHREAD  -fPIE -std=gnu11 -o CMakeFiles/cmTC_ceffd.dir/src.c.o -c /mnt/c/Users/jacky/Desktop/simple_multi/src-gen/trafficv4/build/CMakeFiles/CMakeScratch/TryCompile-WpMRMy/src.c
-Linking C executable cmTC_ceffd
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ceffd.dir/link.txt --verbose=1
-/usr/bin/gcc CMakeFiles/cmTC_ceffd.dir/src.c.o -o cmTC_ceffd 
-/usr/bin/ld: CMakeFiles/cmTC_ceffd.dir/src.c.o: in function `main':
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_36a78/fast && make: Warning: File 'Makefile' has modification time 19 s in the future
+/usr/bin/make  -f CMakeFiles/cmTC_36a78.dir/build.make CMakeFiles/cmTC_36a78.dir/build
+make[1]: Entering directory '/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/trafficv4/build/CMakeFiles/CMakeScratch/TryCompile-vb9uU6'
+make[1]: Warning: File 'CMakeFiles/cmTC_36a78.dir/flags.make' has modification time 19 s in the future
+Building C object CMakeFiles/cmTC_36a78.dir/src.c.o
+/usr/bin/gcc -DCMAKE_HAVE_LIBC_PTHREAD  -fPIE -std=gnu11 -o CMakeFiles/cmTC_36a78.dir/src.c.o -c /mnt/c/Users/jacky/Desktop/simple_multi/src-gen/trafficv4/build/CMakeFiles/CMakeScratch/TryCompile-vb9uU6/src.c
+Linking C executable cmTC_36a78
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_36a78.dir/link.txt --verbose=1
+/usr/bin/gcc CMakeFiles/cmTC_36a78.dir/src.c.o -o cmTC_36a78 
+/usr/bin/ld: CMakeFiles/cmTC_36a78.dir/src.c.o: in function `main':
 src.c:(.text+0x46): undefined reference to `pthread_create'
 /usr/bin/ld: src.c:(.text+0x52): undefined reference to `pthread_detach'
 /usr/bin/ld: src.c:(.text+0x5e): undefined reference to `pthread_cancel'
 /usr/bin/ld: src.c:(.text+0x6f): undefined reference to `pthread_join'
 collect2: error: ld returned 1 exit status
-make[1]: *** [CMakeFiles/cmTC_ceffd.dir/build.make:99: cmTC_ceffd] Error 1
-make[1]: Leaving directory '/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/trafficv4/build/CMakeFiles/CMakeScratch/TryCompile-WpMRMy'
-make: *** [Makefile:127: cmTC_ceffd/fast] Error 2
+make[1]: *** [CMakeFiles/cmTC_36a78.dir/build.make:99: cmTC_36a78] Error 1
+make[1]: Leaving directory '/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/trafficv4/build/CMakeFiles/CMakeScratch/TryCompile-vb9uU6'
+make: *** [Makefile:127: cmTC_36a78/fast] Error 2
 
 
 Source file was:
@@ -42,20 +44,22 @@ int main(void)
 
 
 Determining if the function pthread_create exists in the pthreads failed with the following output:
-Change Dir: /mnt/c/Users/jacky/Desktop/simple_multi/src-gen/trafficv4/build/CMakeFiles/CMakeScratch/TryCompile-iF8Gry
+Change Dir: /mnt/c/Users/jacky/Desktop/simple_multi/src-gen/trafficv4/build/CMakeFiles/CMakeScratch/TryCompile-iSu4w5
 
-Run Build Command(s):/usr/bin/make -f Makefile cmTC_ed55c/fast && /usr/bin/make  -f CMakeFiles/cmTC_ed55c.dir/build.make CMakeFiles/cmTC_ed55c.dir/build
-make[1]: Entering directory '/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/trafficv4/build/CMakeFiles/CMakeScratch/TryCompile-iF8Gry'
-Building C object CMakeFiles/cmTC_ed55c.dir/CheckFunctionExists.c.o
-/usr/bin/gcc   -DCHECK_FUNCTION_EXISTS=pthread_create -fPIE -std=gnu11 -o CMakeFiles/cmTC_ed55c.dir/CheckFunctionExists.c.o -c /mnt/c/Users/jacky/Desktop/simple_multi/src-gen/trafficv4/build/CMakeFiles/CMakeScratch/TryCompile-iF8Gry/CheckFunctionExists.c
-Linking C executable cmTC_ed55c
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ed55c.dir/link.txt --verbose=1
-/usr/bin/gcc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_ed55c.dir/CheckFunctionExists.c.o -o cmTC_ed55c  -lpthreads 
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_1552e/fast && make: Warning: File 'Makefile' has modification time 19 s in the future
+/usr/bin/make  -f CMakeFiles/cmTC_1552e.dir/build.make CMakeFiles/cmTC_1552e.dir/build
+make[1]: Entering directory '/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/trafficv4/build/CMakeFiles/CMakeScratch/TryCompile-iSu4w5'
+make[1]: Warning: File 'CMakeFiles/cmTC_1552e.dir/flags.make' has modification time 19 s in the future
+Building C object CMakeFiles/cmTC_1552e.dir/CheckFunctionExists.c.o
+/usr/bin/gcc   -DCHECK_FUNCTION_EXISTS=pthread_create -fPIE -std=gnu11 -o CMakeFiles/cmTC_1552e.dir/CheckFunctionExists.c.o -c /mnt/c/Users/jacky/Desktop/simple_multi/src-gen/trafficv4/build/CMakeFiles/CMakeScratch/TryCompile-iSu4w5/CheckFunctionExists.c
+Linking C executable cmTC_1552e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1552e.dir/link.txt --verbose=1
+/usr/bin/gcc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_1552e.dir/CheckFunctionExists.c.o -o cmTC_1552e  -lpthreads 
 /usr/bin/ld: cannot find -lpthreads
 collect2: error: ld returned 1 exit status
-make[1]: *** [CMakeFiles/cmTC_ed55c.dir/build.make:99: cmTC_ed55c] Error 1
-make[1]: Leaving directory '/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/trafficv4/build/CMakeFiles/CMakeScratch/TryCompile-iF8Gry'
-make: *** [Makefile:127: cmTC_ed55c/fast] Error 2
+make[1]: *** [CMakeFiles/cmTC_1552e.dir/build.make:99: cmTC_1552e] Error 1
+make[1]: Leaving directory '/mnt/c/Users/jacky/Desktop/simple_multi/src-gen/trafficv4/build/CMakeFiles/CMakeScratch/TryCompile-iSu4w5'
+make: *** [Makefile:127: cmTC_1552e/fast] Error 2
 
 
 
