@@ -1,46 +1,19 @@
 import matplotlib.pyplot as plt
-import numpy as np
-
-# Data
-frameworks = ["Ray", "LF"]
-environment = "TrafficJunction4"
-
-# Time taken for each framework for 100,000 episodes
-time_taken = [167.93, 74.46]  # in seconds
-
-# Calculating games per second for each framework
-games_per_second = [100000 / time for time in time_taken]
-
-# Bar chart settings
-bar_width = 0.1
-index = np.array([0])
-
-# Set the colors
-light_blue = "#6699ff"
-light_red = "#ff6666"
+#from pingouin import partial_corr
 
 
-# Plot the data for each framework
-plt.figure(figsize=(8, 6))  # Adjusting figure size for clarity
-for i, framework in enumerate(frameworks):
-    plt.bar(index + i * bar_width,
-            time_taken[i], bar_width, label=framework, alpha=0.7, color=[light_blue, light_red][i])
+episode = [10000 * i for i in range(1, 11)]
+ray_time = [17.79, 34.48, 51.11, 67.97, 84.68, 101.88, 118.74, 135.64, 152.96, 169.52]
+lf_time = [7.46, 14.88, 22.32, 29.48, 36.54, 43.63, 50.65, 57.64, 64.64, 71.64]
+plt.plot(episode, ray_time, marker='o', label='Ray')
+plt.plot(episode, lf_time, marker='s', label='LF')
 
-# Adjusting the x-ticks position
-middle_positions = index + (bar_width * (len(frameworks) - 1) / 2)
-
-# Labeling the axes, giving a title, and adjusting ticks for better visualization
-plt.xlabel("Framework")
-plt.ylabel("Time Taken (Seconds)")
-plt.title("Time Taken for Inference Task on TrafficJunction4 Environment")
-plt.xticks(middle_positions, [environment])
-
-# Displaying the legend
+# Adding labels and title
+plt.xlabel('Episode')
+plt.ylabel('Time (seconds)')
+plt.xticks(episode)
+#plt.title('Comparison of training time between Ray and LF')
 plt.legend()
 
-# Show the plot
-plt.tight_layout()
-plt.show()
-# Show the plot
-plt.tight_layout()
+# Display the plot
 plt.show()

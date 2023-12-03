@@ -9,7 +9,7 @@ NUM_ENVS = 16
 class RolloutWorker:
     def __init__(self, num_envs):
         self.num_envs = num_envs
-        self.env = gym.vector.make("Pendulum-v0", num_envs=num_envs)
+        self.env = gym.vector.make("Pendulum-v1", num_envs=num_envs)
         self.env.reset()
 
     def step(self, seeds):

@@ -71,7 +71,7 @@ NUM_STEPS = 10000
 
 # Configuration parameters
 NUM_ENVS = 15
-NUM_STEPS = 1000
+NUM_STEPS = 3000
 # End of preamble.
 
 
@@ -97,7 +97,7 @@ class __envreactor:
     def __init__(self, **kwargs):
         # Define parameters and their default values
         # Handle parameters that are set in instantiation
-        self.env = gym.make("Pong-v4")
+        self.env = gym.make("Pong-v0")
         self.__dict__.update(kwargs)
         # Define state variables
 

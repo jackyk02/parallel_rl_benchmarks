@@ -51,7 +51,7 @@ class PolicyActor:
 env = gym.make('ma_gym:TrafficJunction10-v1')
 n_agents = env.n_agents
 actor_handles = [PolicyActor.remote(i) for i in range(n_agents)]
-episode = 10000  # Specify the episode you want to run
+episode = 100000  # Specify the episode you want to run
 state_n = env.reset()
 done_n = [False] * n_agents
 total_reward = 0

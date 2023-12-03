@@ -1,0 +1,2 @@
+#!/bin/sh
+        /usr/local/bin/python3.9 /mnt/c/Users/jacky/Desktop/simple_multi/src-gen/pong_gpu/pong_gpu.py "$@"

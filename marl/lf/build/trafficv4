@@ -1,2 +1,0 @@
-#!/bin/sh
-        /usr/local/bin/python3.9 /mnt/c/Users/jacky/Desktop/simple_multi/src-gen/trafficv4/trafficv4.py "$@"
