@@ -1,0 +1,206 @@
+target Python {
+  threading: True
+}
+
+preamble {=
+  import gym
+  import torch
+  import numpy as np
+  from numpy.random import RandomState
+  import time
+
+  # Constants
+  H = 100  # Number of hidden layer neurons
+  D = 80 * 80  # Input dimensionality: 80x80 grid
+  gamma = 0.99  # Discount factor for reward
+  learning_rate = 1e-4  # Learning rate
+  batch_size = 3  # Batch size for training
+  iterations = 1000  # Number of training iterations
+  SEED = 42  # Seed for reproducibility
+
+  # Device configuration
+  device = torch.device("cpu")
+
+  # Set seeds
+  np.random.seed(SEED)
+  torch.manual_seed(SEED)
+
+
+  def preprocess(img):
+      img = img[35:195]  # Crop
+      img = img[::2, ::2, 0]  # Downsample by factor of 2
+      img[img == 144] = 0  # Erase background (type 1)
+      img[img == 109] = 0  # Erase background (type 2)
+      img[img != 0] = 1  # Everything else (paddles, ball) just set to 1
+      return img.astype(np.float64).ravel()  # Changed np.float to np.float64
+
+
+  class PolicyNetwork(torch.nn.Module):
+      def __init__(self):
+          super(PolicyNetwork, self).__init__()
+          self.fc1 = torch.nn.Linear(D, H)
+          self.fc2 = torch.nn.Linear(H, 1)
+          self.relu = torch.nn.ReLU()
+          self.sigmoid = torch.nn.Sigmoid()
+
+      def forward(self, x):
+          h = self.relu(self.fc1(x))
+          logp = self.fc2(h)
+          p = self.sigmoid(logp)
+          return p, h
+
+
+  def discount_rewards(r):
+      discounted_r = np.zeros_like(r)
+      running_add = 0
+      for t in reversed(range(0, r.size)):
+          if r[t] != 0:
+              # Reset the sum, since this was a game boundary (pong specific!)
+              running_add = 0
+          running_add = running_add * gamma + r[t]
+          discounted_r[t] = running_add
+
+      # Standardize the rewards to be unit normal
+      discounted_r -= np.mean(discounted_r)
+      discounted_r /= np.std(discounted_r)
+      return discounted_r
+
+
+  def rollout(policy, env, rs):
+      observation = env.reset()
+      prev_x = None
+      xs, hs, dlogps, rewards = [], [], [], []
+      done = False
+
+      while not done:
+          cur_x = preprocess(observation)
+          x = torch.from_numpy(
+              cur_x - prev_x if prev_x is not None else np.zeros(D)).float().to(device)
+          prev_x = cur_x
+
+          aprob, h = policy(x)
+          action = 2 if rs.uniform() < aprob.item() else 3  # 2 is UP, 3 is DOWN in Pong
+
+          xs.append(x)
+          hs.append(h)
+          y = 1 if action == 2 else 0
+          dlogps.append(y - aprob)
+
+          observation, reward, done, info = env.step(action)
+          rewards.append(reward)
+
+      epr = np.vstack(rewards)
+      discounted_epr = discount_rewards(epr)
+      epdlogp = torch.vstack(dlogps)
+      # Modulate the gradient with advantage
+      epdlogp *= torch.Tensor(discounted_epr).to(device)
+      rewards = np.array(rewards)
+      return xs, hs, epdlogp, rewards
+=}
+
+reactor ClientReactor {
+  input global_parameters
+  output updated_parameters
+  state env
+  state rs
+
+  reaction(startup) {=
+    self.env = gym.make("Pong-v4")
+    self.env.seed(SEED)
+    self.rs = RandomState(SEED)
+  =}
+
+  reaction(global_parameters) -> updated_parameters {=
+    start_time = time.time()
+    # Compute a simulation episode.
+    policy_weights = global_parameters.value
+
+    policy = PolicyNetwork().to(device)
+    policy.load_state_dict(policy_weights)
+    xs, hs, epdlogp, rewards = rollout(policy, self.env, self.rs)
+
+    loss = -torch.cat([h * logp for h, logp in zip(hs, epdlogp)]).sum()
+    policy.zero_grad()
+    loss.backward()
+
+    total_reward = np.sum(rewards)
+
+    ids = [{k: v.grad.cpu() for k, v in policy.named_parameters()}, total_reward]
+
+    # End timing
+    end_time = time.time()
+
+    # Print the elapsed time
+    print(f"Time taken: {end_time - start_time} seconds")
+    updated_parameters.set(ids)
+  =}
+}
+
+reactor serverReactor {
+  output global_parameters
+  input[3] updated_parameters
+  state rs
+  state model
+  state optimizer
+
+  state round_num
+  state running_reward
+  state start_time
+
+  reaction(startup) -> global_parameters {=
+    self.rs = RandomState(SEED)
+    self.model = PolicyNetwork().to(device)
+    self.optimizer = torch.optim.RMSprop(self.model.parameters(), lr=learning_rate)
+
+    self.round_num = 0
+    self.running_reward = None
+    self.start_time = time.time()
+
+    model_weights = self.model.state_dict()
+    global_parameters.set(model_weights)
+  =}
+
+  reaction(updated_parameters) -> global_parameters {=
+    reward_sum = 0
+    for i in range(3):
+        gradients = updated_parameters[i].value[0]
+        reward = updated_parameters[i].value[1]
+        reward_sum += reward
+
+        for name, param in self.model.named_parameters():
+            param.grad = gradients[name].to(device)
+
+        self.optimizer.step()
+        self.optimizer.zero_grad()
+
+
+    # Update running reward
+    self.running_reward = reward_sum / batch_size if self.running_reward is None else self.running_reward * \
+        0.99 + (reward_sum / batch_size) * 0.01
+
+    # Check if it's the first round
+    if int(self.round_num) == 0:
+        self.start_time = time.time()
+
+    # Print round number
+    print("Round: " + str(self.round_num))
+    self.round_num += 1
+
+    # Calculate and print elapsed time
+    elapsed_time = time.time() - self.start_time
+    print(f"Training time: {elapsed_time:.4f} seconds")
+
+    # Print running reward
+    print("Reward: " + str(self.running_reward) + " \n")
+
+    model_weights = self.model.state_dict()
+    global_parameters.set(model_weights)
+  =}
+}
+
+main reactor {
+  client = new[3] ClientReactor()
+  server = new serverReactor()
+  (server.global_parameters)+ -> client.global_parameters after 0
+  client.updated_parameters -> server.updated_parameters
+}
