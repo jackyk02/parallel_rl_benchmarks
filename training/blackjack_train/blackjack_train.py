@@ -1,23 +1,14 @@
-from torch.distributions import Categorical
-from collections import deque
-import numpy as np
-import torch.optim as optim
-import torch.nn as nn
-import torch
-import gym
-import time
-import copy
-import LinguaFrancablackjack_train as lf
-from LinguaFrancablackjack_train import (
-    Tag, action_capsule_t, port_capsule, request_stop, schedule_copy, start
-)
 import os
 import sys
 sys.path.append(os.path.dirname(__file__))
 # List imported names, but do not use pylint's --extension-pkg-allow-list option
 # so that these names will be assumed present without having to compile and install.
 # pylint: disable=no-name-in-module, import-error
+from LinguaFrancablackjack_train import (
+    Tag, action_capsule_t, port_capsule, request_stop, schedule_copy, start
+)
 # pylint: disable=c-extension-no-member
+import LinguaFrancablackjack_train as lf
 try:
     from LinguaFrancaBase.constants import BILLION, FOREVER, NEVER, instant_t, interval_t
     from LinguaFrancaBase.functions import (
@@ -29,13 +20,20 @@ except ModuleNotFoundError:
     print("No module named 'LinguaFrancaBase'. "
           "Install using \"pip3 install LinguaFrancaBase\".")
     sys.exit(1)
+import copy
 
 # From the preamble, verbatim:
-# Import packages
+#Import packages
+import time
+import gym
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+from collections import deque
+from torch.distributions import Categorical
 
 # Define the Policy Network
-
-
 class PolicyNetwork(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super(PolicyNetwork, self).__init__()
@@ -76,14 +74,19 @@ def update_policy_network(batch):
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-
 # End of preamble.
 # From the preamble, verbatim:
-# Import packages
+#Import packages
+import time
+import gym
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+from collections import deque
+from torch.distributions import Categorical
 
 # Define the Policy Network
-
-
 class PolicyNetwork(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super(PolicyNetwork, self).__init__()
@@ -124,14 +127,19 @@ def update_policy_network(batch):
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-
 # End of preamble.
 # From the preamble, verbatim:
-# Import packages
+#Import packages
+import time
+import gym
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+from collections import deque
+from torch.distributions import Categorical
 
 # Define the Policy Network
-
-
 class PolicyNetwork(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super(PolicyNetwork, self).__init__()
@@ -172,14 +180,19 @@ def update_policy_network(batch):
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-
 # End of preamble.
 # From the preamble, verbatim:
-# Import packages
+#Import packages
+import time
+import gym
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+from collections import deque
+from torch.distributions import Categorical
 
 # Define the Policy Network
-
-
 class PolicyNetwork(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super(PolicyNetwork, self).__init__()
@@ -220,14 +233,19 @@ def update_policy_network(batch):
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-
 # End of preamble.
 # From the preamble, verbatim:
-# Import packages
+#Import packages
+import time
+import gym
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+from collections import deque
+from torch.distributions import Categorical
 
 # Define the Policy Network
-
-
 class PolicyNetwork(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super(PolicyNetwork, self).__init__()
@@ -268,14 +286,19 @@ def update_policy_network(batch):
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-
 # End of preamble.
 # From the preamble, verbatim:
-# Import packages
+#Import packages
+import time
+import gym
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+from collections import deque
+from torch.distributions import Categorical
 
 # Define the Policy Network
-
-
 class PolicyNetwork(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super(PolicyNetwork, self).__init__()
@@ -316,14 +339,19 @@ def update_policy_network(batch):
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-
 # End of preamble.
 # From the preamble, verbatim:
-# Import packages
+#Import packages
+import time
+import gym
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+from collections import deque
+from torch.distributions import Categorical
 
 # Define the Policy Network
-
-
 class PolicyNetwork(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super(PolicyNetwork, self).__init__()
@@ -364,14 +392,19 @@ def update_policy_network(batch):
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-
 # End of preamble.
 # From the preamble, verbatim:
-# Import packages
+#Import packages
+import time
+import gym
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+from collections import deque
+from torch.distributions import Categorical
 
 # Define the Policy Network
-
-
 class PolicyNetwork(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super(PolicyNetwork, self).__init__()
@@ -412,14 +445,19 @@ def update_policy_network(batch):
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-
 # End of preamble.
 # From the preamble, verbatim:
-# Import packages
+#Import packages
+import time
+import gym
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+from collections import deque
+from torch.distributions import Categorical
 
 # Define the Policy Network
-
-
 class PolicyNetwork(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super(PolicyNetwork, self).__init__()
@@ -460,14 +498,19 @@ def update_policy_network(batch):
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-
 # End of preamble.
 # From the preamble, verbatim:
-# Import packages
+#Import packages
+import time
+import gym
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+from collections import deque
+from torch.distributions import Categorical
 
 # Define the Policy Network
-
-
 class PolicyNetwork(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super(PolicyNetwork, self).__init__()
@@ -520,10 +563,13 @@ class __blackjack_train_main:
         # Handle parameters that are set in instantiation
         self.__dict__.update(kwargs)
         # Define state variables
-
+    
     @property
     def bank_index(self):
-        return self._bank_index  # pylint: disable=no-member
+        return self._bank_index # pylint: disable=no-member
+    
+    
+
 
 
 # Python class for reactor _rolloutreactor
@@ -537,32 +583,33 @@ class __rolloutreactor:
         # Define state variables
         self.env = None
         self.obs = None
-
+    
     @property
     def bank_index(self):
-        return self._bank_index  # pylint: disable=no-member
+        return self._bank_index # pylint: disable=no-member
+    
+    
 
     def reaction_function_0(self):
-
+    
         self.env = gym.make("Blackjack-v1")
         self.obs = self.env.reset()
         self.policy_net = PolicyNetwork(3, 32, 2).to("cpu")
         return 0
-
     def reaction_function_1(self, gradients, trajectories):
-
+    
         self.policy_net.load_state_dict(gradients.value)
         experiences = []
-
-        for _ in range(10):
+        
+        for _ in range(100):
             state_tensor = torch.from_numpy(
                 np.array(self.obs)).float().unsqueeze(0)
             action_probs = self.policy_net(state_tensor).detach().numpy()
             action = np.random.choice(2, p=action_probs.ravel())
-
+        
             next_state, reward, done, _ = self.env.step(action)
             experiences.append((state_tensor, action, reward))
-
+        
             if done:
                 self.obs = self.env.reset()
             else:
@@ -571,8 +618,6 @@ class __rolloutreactor:
         return 0
 
 # Python class for reactor _replaybufferreactor
-
-
 class __replaybufferreactor:
 
     # Constructor
@@ -582,32 +627,31 @@ class __replaybufferreactor:
         self.__dict__.update(kwargs)
         # Define state variables
         self.experiences = None
-
+    
     @property
     def bank_index(self):
-        return self._bank_index  # pylint: disable=no-member
+        return self._bank_index # pylint: disable=no-member
+    
+    
 
     def reaction_function_0(self):
-
-        # Initialize ReplayBuffer
-        self.experiences = deque(maxlen=10000)
+    
+        #Initialize ReplayBuffer
+        self.experiences = deque(maxlen=5000)
         return 0
-
     def reaction_function_1(self, trajectories, dataset):
-
-        # Append Trajectories into ReplayBuffer
-        for i in range(3):
-            new_experiences = trajectories[i].value
-            if new_experiences is not None:
-                self.experiences.extend(new_experiences)
-
-        result = list(self.experiences)[:5000]
+    
+        #Append Trajectories into ReplayBuffer
+        for i in range(16):
+          new_experiences = trajectories[i].value
+          if new_experiences is not None:
+              self.experiences.extend(new_experiences)
+        
+        result = list(self.experiences)[:500]
         dataset.set(result)
         return 0
 
 # Python class for reactor _learnerreactor
-
-
 class __learnerreactor:
 
     # Constructor
@@ -619,63 +663,67 @@ class __learnerreactor:
         self.start_time = None
         self.policy_net_state = None
         self.round = None
-
+    
     @property
     def bank_index(self):
-        return self._bank_index  # pylint: disable=no-member
+        return self._bank_index # pylint: disable=no-member
+    
+    
 
     def reaction_function_0(self, gradients):
-
+    
         # Initialize the policy
         self.start_time = time.time()
         self.round = 0
-        self.policy_net_state = {key: tensor.to(
-            "cpu") for key, tensor in policy_net.state_dict().items()}
+        self.policy_net_state = {key: tensor.to("cpu") for key, tensor in policy_net.state_dict().items()}
         gradients.set(self.policy_net_state)
         return 0
-
     def reaction_function_1(self, dataset, gradients):
-
+    
         # Update the policy
         batch = dataset.value
         if batch:
+            print(len(batch))
             update_policy_network(batch)
-
-        print(
-            f"Round {self.round}, Training Time: {time.time()-self.start_time:.2f}")
-        self.round += 1
-
-        self.policy_net_state = {key: tensor.to(
-            "cpu") for key, tensor in policy_net.state_dict().items()}
-
+        
+        print(f"Round {self.round}, Training Time: {time.time()-self.start_time:.2f}")
+        self.round+=1
+        
+        self.policy_net_state = {key: tensor.to("cpu") for key, tensor in policy_net.state_dict().items()}
+        
         gradients.set(self.policy_net_state)
         return 0
 
 # Python class for reactor __lf_gendelay_0
-
-
 class ___lf_gendelay_0:
 
     # Constructor
     def __init__(self, **kwargs):
         # Define parameters and their default values
-        self._delay: interval_t = 0
+        self._delay:interval_t = 0
         # Handle parameters that are set in instantiation
         self.__dict__.update(kwargs)
         # Define state variables
-
+    
     @property
     def delay(self):
-        return self._delay  # pylint: disable=no-member
-
+        return self._delay # pylint: disable=no-member
+    
+    
     @property
     def bank_index(self):
-        return self._bank_index  # pylint: disable=no-member
+        return self._bank_index # pylint: disable=no-member
+    
+    
+
+    
+    
+
 
 
 # Instantiate classes
 blackjack_train_main_lf = [None] * 1
-blackjack_train_rollout_lf = [None] * 3
+blackjack_train_rollout_lf = [None] * 16
 blackjack_train_replay_lf = [None] * 1
 blackjack_train_learner_lf = [None] * 1
 blackjack_train_delay_lf = [None] * 1
@@ -683,31 +731,31 @@ blackjack_train_delay_lf = [None] * 1
 for blackjack_train_main_i in range(1):
     bank_index = blackjack_train_main_i
     blackjack_train_main_lf[0] = __blackjack_train_main(
-        _bank_index=0,
+        _bank_index = 0,
     )
     # Start initializing blackjack_train.rollout of class _rolloutreactor
-    for blackjack_train_rollout_i in range(3):
+    for blackjack_train_rollout_i in range(16):
         bank_index = blackjack_train_rollout_i
         blackjack_train_rollout_lf[blackjack_train_rollout_i] = __rolloutreactor(
-            _bank_index=blackjack_train_rollout_i,
+            _bank_index = blackjack_train_rollout_i,
         )
     # Start initializing blackjack_train.replay of class _replaybufferreactor
     for blackjack_train_replay_i in range(1):
         bank_index = blackjack_train_replay_i
         blackjack_train_replay_lf[0] = __replaybufferreactor(
-            _bank_index=0,
+            _bank_index = 0,
         )
     # Start initializing blackjack_train.learner of class _learnerreactor
     for blackjack_train_learner_i in range(1):
         bank_index = blackjack_train_learner_i
         blackjack_train_learner_lf[0] = __learnerreactor(
-            _bank_index=0,
+            _bank_index = 0,
         )
     # Start initializing blackjack_train.delay of class __lf_gendelay_0
     for blackjack_train_delay_i in range(1):
         bank_index = blackjack_train_delay_i
         blackjack_train_delay_lf[0] = ___lf_gendelay_0(
-            _bank_index=blackjack_train_delay_i,
+            _bank_index = blackjack_train_delay_i,
             _delay=0,
         )
 
@@ -716,8 +764,7 @@ for blackjack_train_main_i in range(1):
 def main(argv):
     start(argv)
 
-
 # As is customary in Python programs, the main() function
 # should only be executed if the main module is active.
-if __name__ == "__main__":
+if __name__=="__main__":
     main(sys.argv)

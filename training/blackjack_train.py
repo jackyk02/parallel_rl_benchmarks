@@ -68,7 +68,7 @@ class RolloutActor:
         self.policy_net.load_state_dict(policy_net_state_dict)
         experiences = []
 
-        for _ in range(10):
+        for _ in range(100):
             state_tensor = torch.from_numpy(
                 np.array(self.state)).float().unsqueeze(0)
             action_probs = self.policy_net(state_tensor).detach().numpy()
@@ -90,12 +90,12 @@ class RolloutActor:
 @ray.remote
 class ReplayBufferActor:
     def __init__(self):
-        self.experiences = deque(maxlen=10000)
+        self.experiences = deque(maxlen=5000)
 
     def manage_experiences(self, new_experiences=None):
         if new_experiences is not None:
             self.experiences.extend(new_experiences)
-        return list(self.experiences)[:5000]
+        return list(self.experiences)[:500]
 
 
 # Training loop

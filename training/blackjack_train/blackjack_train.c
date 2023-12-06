@@ -31,7 +31,7 @@ typedef enum {
 environment_t envs[_num_enclaves];
 // 'Create' and initialize the environments in the program
 void _lf_create_environments() {
-    environment_init(&envs[blackjack_train_main],blackjack_train_main,_lf_number_of_workers,0,5,0,0,7,0,0,NULL);
+    environment_init(&envs[blackjack_train_main],blackjack_train_main,_lf_number_of_workers,0,18,0,0,20,0,0,NULL);
 }
 // Update the pointer argument to point to the beginning of the environment array
 // and return the size of that array
@@ -56,7 +56,7 @@ void _lf_initialize_trigger_objects() {
     SUPPRESS_UNUSED_WARNING(watchdog_number);
     _blackjack_train_main_main_self_t* blackjack_train_main_self[1];
     SUPPRESS_UNUSED_WARNING(blackjack_train_main_self);
-    _rolloutreactor_self_t* blackjack_train_rollout_self[3];
+    _rolloutreactor_self_t* blackjack_train_rollout_self[16];
     SUPPRESS_UNUSED_WARNING(blackjack_train_rollout_self);
     _replaybufferreactor_self_t* blackjack_train_replay_self[1];
     SUPPRESS_UNUSED_WARNING(blackjack_train_replay_self);
@@ -71,7 +71,7 @@ void _lf_initialize_trigger_objects() {
     SUPPRESS_UNUSED_WARNING(_lf_watchdog_count);
     
     // Reactor is a bank. Iterate over bank members.
-    for (int blackjack_train_rollout_i = 0; blackjack_train_rollout_i < 3; blackjack_train_rollout_i++) {
+    for (int blackjack_train_rollout_i = 0; blackjack_train_rollout_i < 16; blackjack_train_rollout_i++) {
         // ***** Start initializing blackjack_train.rollout of class RolloutReactor
         blackjack_train_rollout_self[blackjack_train_rollout_i] = new__rolloutreactor();
         blackjack_train_rollout_self[blackjack_train_rollout_i]->base.environment = &envs[blackjack_train_main];
@@ -126,13 +126,13 @@ void _lf_initialize_trigger_objects() {
         }
         // width of -2 indicates that it is not a multiport.
         blackjack_train_replay_self[0]->_lf_dataset_width = -2;
-        blackjack_train_replay_self[0]->_lf_trajectories_width = 3;
+        blackjack_train_replay_self[0]->_lf_trajectories_width = 16;
         // Allocate memory for multiport inputs.
         blackjack_train_replay_self[0]->_lf_trajectories = (_replaybufferreactor_trajectories_t**)_lf_allocate(
-                3, sizeof(_replaybufferreactor_trajectories_t*),
+                16, sizeof(_replaybufferreactor_trajectories_t*),
                 &blackjack_train_replay_self[0]->base.allocations); 
         // Set inputs by default to an always absent default input.
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 16; i++) {
             blackjack_train_replay_self[0]->_lf_trajectories[i] = &blackjack_train_replay_self[0]->_lf_default__trajectories;
         }
         envs[blackjack_train_main].startup_reactions[startup_reaction_count[blackjack_train_main]++] = &blackjack_train_replay_self[0]->_lf__reaction_0;
@@ -205,7 +205,7 @@ void _lf_initialize_trigger_objects() {
     
         // **** Start deferred initialize for blackjack_train.rollout
         // Reactor is a bank. Iterate over bank members.
-        for (int blackjack_train_rollout_i = 0; blackjack_train_rollout_i < 3; blackjack_train_rollout_i++) {
+        for (int blackjack_train_rollout_i = 0; blackjack_train_rollout_i < 16; blackjack_train_rollout_i++) {
         
             // Total number of outputs (single ports and multiport channels)
             // produced by reaction_1 of blackjack_train.rollout.
@@ -372,13 +372,13 @@ void _lf_initialize_trigger_objects() {
     
         // **** Start non-nested deferred initialize for blackjack_train.rollout
         // Reactor is a bank. Iterate over bank members.
-        for (int blackjack_train_rollout_i = 0; blackjack_train_rollout_i < 3; blackjack_train_rollout_i++) {
+        for (int blackjack_train_rollout_i = 0; blackjack_train_rollout_i < 16; blackjack_train_rollout_i++) {
         
             // For reference counting, set num_destinations for port blackjack_train.rollout.trajectories.
-            // Iterate over range blackjack_train.rollout.trajectories(0,3)->[blackjack_train.replay.trajectories(0,3)].
+            // Iterate over range blackjack_train.rollout.trajectories(0,16)->[blackjack_train.replay.trajectories(0,16)].
             {
                 int range_start[] =  { 0, 0 };
-                int range_radixes[] = { 1, 3 };
+                int range_radixes[] = { 1, 16 };
                 int permutation[] = { 0, 1 };
                 mixed_radix_int_t range_mr = {
                     2,
@@ -386,7 +386,7 @@ void _lf_initialize_trigger_objects() {
                     range_radixes,
                     permutation
                 };
-                for (int range_count = 0; range_count < 0 + 3; range_count++) {
+                for (int range_count = 0; range_count < 0 + 16; range_count++) {
                     int src_runtime = mixed_radix_parent(&range_mr, 1); // Runtime index.
                     SUPPRESS_UNUSED_WARNING(src_runtime);
                     int src_channel = range_mr.digits[0]; // Channel index.
@@ -399,11 +399,11 @@ void _lf_initialize_trigger_objects() {
                 }
             }
             {
-                int triggers_index[3] = { 0 }; // Number of bank members with the reaction.
-                // Iterate over range blackjack_train.rollout.trajectories(0,3)->[blackjack_train.replay.trajectories(0,3)].
+                int triggers_index[16] = { 0 }; // Number of bank members with the reaction.
+                // Iterate over range blackjack_train.rollout.trajectories(0,16)->[blackjack_train.replay.trajectories(0,16)].
                 {
                     int range_start[] =  { 0, 0 };
-                    int range_radixes[] = { 1, 3 };
+                    int range_radixes[] = { 1, 16 };
                     int permutation[] = { 0, 1 };
                     mixed_radix_int_t range_mr = {
                         2,
@@ -411,7 +411,7 @@ void _lf_initialize_trigger_objects() {
                         range_radixes,
                         permutation
                     };
-                    for (int range_count = 0; range_count < 0 + 3; range_count++) {
+                    for (int range_count = 0; range_count < 0 + 16; range_count++) {
                         int src_runtime = mixed_radix_parent(&range_mr, 1); // Runtime index.
                         SUPPRESS_UNUSED_WARNING(src_runtime);
                         int src_channel = range_mr.digits[0]; // Channel index.
@@ -430,12 +430,12 @@ void _lf_initialize_trigger_objects() {
                         mixed_radix_incr(&range_mr);
                     }
                 }
-                for (int i = 0; i < 3; i++) triggers_index[i] = 0;
-                // Iterate over ranges blackjack_train.rollout.trajectories(0,3)->[blackjack_train.replay.trajectories(0,3)] and blackjack_train.replay.trajectories(0,3).
+                for (int i = 0; i < 16; i++) triggers_index[i] = 0;
+                // Iterate over ranges blackjack_train.rollout.trajectories(0,16)->[blackjack_train.replay.trajectories(0,16)] and blackjack_train.replay.trajectories(0,16).
                 {
                     int src_start[] =  { 0, 0 };
                     int src_value[] =  { 0, 0 }; // Will be incremented.
-                    int src_radixes[] = { 1, 3 };
+                    int src_radixes[] = { 1, 16 };
                     int src_permutation[] = { 0, 1 };
                     mixed_radix_int_t src_range_mr = {
                         2,
@@ -443,10 +443,10 @@ void _lf_initialize_trigger_objects() {
                         src_radixes,
                         src_permutation
                     };
-                    // Iterate over range blackjack_train.replay.trajectories(0,3).
+                    // Iterate over range blackjack_train.replay.trajectories(0,16).
                     {
                         int range_start[] =  { 0, 0 };
-                        int range_radixes[] = { 3, 1 };
+                        int range_radixes[] = { 16, 1 };
                         int permutation[] = { 0, 1 };
                         mixed_radix_int_t range_mr = {
                             2,
@@ -454,7 +454,7 @@ void _lf_initialize_trigger_objects() {
                             range_radixes,
                             permutation
                         };
-                        for (int range_count = 0; range_count < 0 + 3; range_count++) {
+                        for (int range_count = 0; range_count < 0 + 16; range_count++) {
                             int dst_runtime = mixed_radix_parent(&range_mr, 1); // Runtime index.
                             SUPPRESS_UNUSED_WARNING(dst_runtime);
                             int dst_channel = range_mr.digits[0]; // Channel index.
@@ -470,7 +470,7 @@ void _lf_initialize_trigger_objects() {
                             // Point to destination port blackjack_train.replay.trajectories's trigger struct.
                             blackjack_train_rollout_self[src_runtime]->_lf__reaction_1.triggers[triggers_index[src_runtime] + src_channel][0] = &blackjack_train_replay_self[dst_runtime]->_lf__trajectories;
                             mixed_radix_incr(&src_range_mr);
-                            if (mixed_radix_to_int(&src_range_mr) >= 0 + 3) {
+                            if (mixed_radix_to_int(&src_range_mr) >= 0 + 16) {
                                 // Start over with the source.
                                 for (int i = 0; i < src_range_mr.size; i++) {
                                     src_range_mr.digits[i] = src_start[i];
@@ -635,35 +635,35 @@ void _lf_initialize_trigger_objects() {
         for (int blackjack_train_delay_i = 0; blackjack_train_delay_i < 1; blackjack_train_delay_i++) {
         
             // For reference counting, set num_destinations for port blackjack_train.delay.out.
-            // Iterate over range blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)].
+            // Iterate over range blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)].
             {
                 int src_runtime = 0; SUPPRESS_UNUSED_WARNING(src_runtime); // Runtime index.
                 int src_channel = 0; SUPPRESS_UNUSED_WARNING(src_channel); // Channel index.
                 int src_bank = 0; SUPPRESS_UNUSED_WARNING(src_bank); // Bank index.
                 int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
-                blackjack_train_delay_self[src_runtime]->_lf_out._base.num_destinations = 3;
+                blackjack_train_delay_self[src_runtime]->_lf_out._base.num_destinations = 16;
                 blackjack_train_delay_self[src_runtime]->_lf_out._base.source_reactor = (self_base_t*)blackjack_train_delay_self[src_runtime];
             }
             {
                 int triggers_index[1] = { 0 }; // Number of bank members with the reaction.
-                // Iterate over range blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)].
+                // Iterate over range blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)].
                 {
                     int src_runtime = 0; SUPPRESS_UNUSED_WARNING(src_runtime); // Runtime index.
                     int src_channel = 0; SUPPRESS_UNUSED_WARNING(src_channel); // Channel index.
                     int src_bank = 0; SUPPRESS_UNUSED_WARNING(src_bank); // Bank index.
                     int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
-                    // Reaction 0 of blackjack_train.delay triggers 3 downstream reactions
+                    // Reaction 0 of blackjack_train.delay triggers 16 downstream reactions
                     // through port blackjack_train.delay.out.
-                    blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggered_sizes[triggers_index[src_runtime]] = 3;
+                    blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggered_sizes[triggers_index[src_runtime]] = 16;
                     // For reaction 0 of blackjack_train.delay, allocate an
                     // array of trigger pointers for downstream reactions through port blackjack_train.delay.out
                     trigger_t** trigger_array = (trigger_t**)_lf_allocate(
-                            3, sizeof(trigger_t*),
+                            16, sizeof(trigger_t*),
                             &blackjack_train_delay_self[src_runtime]->base.allocations); 
                     blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime]++] = trigger_array;
                 }
                 for (int i = 0; i < 1; i++) triggers_index[i] = 0;
-                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(0,1).
+                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(0,1).
                 {
                     int src_runtime = 0; // Runtime index.
                     SUPPRESS_UNUSED_WARNING(src_runtime);
@@ -681,7 +681,241 @@ void _lf_initialize_trigger_objects() {
                         blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][0] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
                     }
                 }
-                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(2,1).
+                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(15,1).
+                {
+                    int src_runtime = 0; // Runtime index.
+                    SUPPRESS_UNUSED_WARNING(src_runtime);
+                    int src_channel = 0; // Channel index.
+                    SUPPRESS_UNUSED_WARNING(src_channel);
+                    int src_bank = 0; // Bank index.
+                    SUPPRESS_UNUSED_WARNING(src_bank);
+                    // Iterate over range blackjack_train.rollout.gradients(15,1).
+                    {
+                        int dst_runtime = 15; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+                        int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+                        int dst_bank = 15; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+                        int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+                        // Point to destination port blackjack_train.rollout.gradients's trigger struct.
+                        blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][1] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
+                    }
+                }
+                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(14,1).
+                {
+                    int src_runtime = 0; // Runtime index.
+                    SUPPRESS_UNUSED_WARNING(src_runtime);
+                    int src_channel = 0; // Channel index.
+                    SUPPRESS_UNUSED_WARNING(src_channel);
+                    int src_bank = 0; // Bank index.
+                    SUPPRESS_UNUSED_WARNING(src_bank);
+                    // Iterate over range blackjack_train.rollout.gradients(14,1).
+                    {
+                        int dst_runtime = 14; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+                        int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+                        int dst_bank = 14; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+                        int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+                        // Point to destination port blackjack_train.rollout.gradients's trigger struct.
+                        blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][2] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
+                    }
+                }
+                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(13,1).
+                {
+                    int src_runtime = 0; // Runtime index.
+                    SUPPRESS_UNUSED_WARNING(src_runtime);
+                    int src_channel = 0; // Channel index.
+                    SUPPRESS_UNUSED_WARNING(src_channel);
+                    int src_bank = 0; // Bank index.
+                    SUPPRESS_UNUSED_WARNING(src_bank);
+                    // Iterate over range blackjack_train.rollout.gradients(13,1).
+                    {
+                        int dst_runtime = 13; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+                        int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+                        int dst_bank = 13; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+                        int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+                        // Point to destination port blackjack_train.rollout.gradients's trigger struct.
+                        blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][3] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
+                    }
+                }
+                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(12,1).
+                {
+                    int src_runtime = 0; // Runtime index.
+                    SUPPRESS_UNUSED_WARNING(src_runtime);
+                    int src_channel = 0; // Channel index.
+                    SUPPRESS_UNUSED_WARNING(src_channel);
+                    int src_bank = 0; // Bank index.
+                    SUPPRESS_UNUSED_WARNING(src_bank);
+                    // Iterate over range blackjack_train.rollout.gradients(12,1).
+                    {
+                        int dst_runtime = 12; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+                        int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+                        int dst_bank = 12; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+                        int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+                        // Point to destination port blackjack_train.rollout.gradients's trigger struct.
+                        blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][4] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
+                    }
+                }
+                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(11,1).
+                {
+                    int src_runtime = 0; // Runtime index.
+                    SUPPRESS_UNUSED_WARNING(src_runtime);
+                    int src_channel = 0; // Channel index.
+                    SUPPRESS_UNUSED_WARNING(src_channel);
+                    int src_bank = 0; // Bank index.
+                    SUPPRESS_UNUSED_WARNING(src_bank);
+                    // Iterate over range blackjack_train.rollout.gradients(11,1).
+                    {
+                        int dst_runtime = 11; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+                        int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+                        int dst_bank = 11; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+                        int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+                        // Point to destination port blackjack_train.rollout.gradients's trigger struct.
+                        blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][5] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
+                    }
+                }
+                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(10,1).
+                {
+                    int src_runtime = 0; // Runtime index.
+                    SUPPRESS_UNUSED_WARNING(src_runtime);
+                    int src_channel = 0; // Channel index.
+                    SUPPRESS_UNUSED_WARNING(src_channel);
+                    int src_bank = 0; // Bank index.
+                    SUPPRESS_UNUSED_WARNING(src_bank);
+                    // Iterate over range blackjack_train.rollout.gradients(10,1).
+                    {
+                        int dst_runtime = 10; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+                        int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+                        int dst_bank = 10; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+                        int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+                        // Point to destination port blackjack_train.rollout.gradients's trigger struct.
+                        blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][6] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
+                    }
+                }
+                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(9,1).
+                {
+                    int src_runtime = 0; // Runtime index.
+                    SUPPRESS_UNUSED_WARNING(src_runtime);
+                    int src_channel = 0; // Channel index.
+                    SUPPRESS_UNUSED_WARNING(src_channel);
+                    int src_bank = 0; // Bank index.
+                    SUPPRESS_UNUSED_WARNING(src_bank);
+                    // Iterate over range blackjack_train.rollout.gradients(9,1).
+                    {
+                        int dst_runtime = 9; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+                        int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+                        int dst_bank = 9; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+                        int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+                        // Point to destination port blackjack_train.rollout.gradients's trigger struct.
+                        blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][7] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
+                    }
+                }
+                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(8,1).
+                {
+                    int src_runtime = 0; // Runtime index.
+                    SUPPRESS_UNUSED_WARNING(src_runtime);
+                    int src_channel = 0; // Channel index.
+                    SUPPRESS_UNUSED_WARNING(src_channel);
+                    int src_bank = 0; // Bank index.
+                    SUPPRESS_UNUSED_WARNING(src_bank);
+                    // Iterate over range blackjack_train.rollout.gradients(8,1).
+                    {
+                        int dst_runtime = 8; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+                        int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+                        int dst_bank = 8; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+                        int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+                        // Point to destination port blackjack_train.rollout.gradients's trigger struct.
+                        blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][8] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
+                    }
+                }
+                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(7,1).
+                {
+                    int src_runtime = 0; // Runtime index.
+                    SUPPRESS_UNUSED_WARNING(src_runtime);
+                    int src_channel = 0; // Channel index.
+                    SUPPRESS_UNUSED_WARNING(src_channel);
+                    int src_bank = 0; // Bank index.
+                    SUPPRESS_UNUSED_WARNING(src_bank);
+                    // Iterate over range blackjack_train.rollout.gradients(7,1).
+                    {
+                        int dst_runtime = 7; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+                        int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+                        int dst_bank = 7; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+                        int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+                        // Point to destination port blackjack_train.rollout.gradients's trigger struct.
+                        blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][9] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
+                    }
+                }
+                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(6,1).
+                {
+                    int src_runtime = 0; // Runtime index.
+                    SUPPRESS_UNUSED_WARNING(src_runtime);
+                    int src_channel = 0; // Channel index.
+                    SUPPRESS_UNUSED_WARNING(src_channel);
+                    int src_bank = 0; // Bank index.
+                    SUPPRESS_UNUSED_WARNING(src_bank);
+                    // Iterate over range blackjack_train.rollout.gradients(6,1).
+                    {
+                        int dst_runtime = 6; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+                        int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+                        int dst_bank = 6; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+                        int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+                        // Point to destination port blackjack_train.rollout.gradients's trigger struct.
+                        blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][10] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
+                    }
+                }
+                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(5,1).
+                {
+                    int src_runtime = 0; // Runtime index.
+                    SUPPRESS_UNUSED_WARNING(src_runtime);
+                    int src_channel = 0; // Channel index.
+                    SUPPRESS_UNUSED_WARNING(src_channel);
+                    int src_bank = 0; // Bank index.
+                    SUPPRESS_UNUSED_WARNING(src_bank);
+                    // Iterate over range blackjack_train.rollout.gradients(5,1).
+                    {
+                        int dst_runtime = 5; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+                        int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+                        int dst_bank = 5; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+                        int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+                        // Point to destination port blackjack_train.rollout.gradients's trigger struct.
+                        blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][11] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
+                    }
+                }
+                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(4,1).
+                {
+                    int src_runtime = 0; // Runtime index.
+                    SUPPRESS_UNUSED_WARNING(src_runtime);
+                    int src_channel = 0; // Channel index.
+                    SUPPRESS_UNUSED_WARNING(src_channel);
+                    int src_bank = 0; // Bank index.
+                    SUPPRESS_UNUSED_WARNING(src_bank);
+                    // Iterate over range blackjack_train.rollout.gradients(4,1).
+                    {
+                        int dst_runtime = 4; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+                        int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+                        int dst_bank = 4; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+                        int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+                        // Point to destination port blackjack_train.rollout.gradients's trigger struct.
+                        blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][12] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
+                    }
+                }
+                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(3,1).
+                {
+                    int src_runtime = 0; // Runtime index.
+                    SUPPRESS_UNUSED_WARNING(src_runtime);
+                    int src_channel = 0; // Channel index.
+                    SUPPRESS_UNUSED_WARNING(src_channel);
+                    int src_bank = 0; // Bank index.
+                    SUPPRESS_UNUSED_WARNING(src_bank);
+                    // Iterate over range blackjack_train.rollout.gradients(3,1).
+                    {
+                        int dst_runtime = 3; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+                        int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+                        int dst_bank = 3; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+                        int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+                        // Point to destination port blackjack_train.rollout.gradients's trigger struct.
+                        blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][13] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
+                    }
+                }
+                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(2,1).
                 {
                     int src_runtime = 0; // Runtime index.
                     SUPPRESS_UNUSED_WARNING(src_runtime);
@@ -696,10 +930,10 @@ void _lf_initialize_trigger_objects() {
                         int dst_bank = 2; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
                         int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
                         // Point to destination port blackjack_train.rollout.gradients's trigger struct.
-                        blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][1] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
+                        blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][14] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
                     }
                 }
-                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(1,1).
+                // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(1,1).
                 {
                     int src_runtime = 0; // Runtime index.
                     SUPPRESS_UNUSED_WARNING(src_runtime);
@@ -714,7 +948,7 @@ void _lf_initialize_trigger_objects() {
                         int dst_bank = 1; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
                         int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
                         // Point to destination port blackjack_train.rollout.gradients's trigger struct.
-                        blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][2] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
+                        blackjack_train_delay_self[src_runtime]->_lf__reaction_0.triggers[triggers_index[src_runtime] + src_channel][15] = &blackjack_train_rollout_self[dst_runtime]->_lf__gradients;
                     }
                 }
             }
@@ -725,12 +959,12 @@ void _lf_initialize_trigger_objects() {
     // **** End of non-nested deferred initialize for blackjack_train
     // Connect inputs and outputs for reactor blackjack_train.
     // Connect inputs and outputs for reactor blackjack_train.rollout.
-    // Connect blackjack_train.rollout.trajectories(0,3)->[blackjack_train.replay.trajectories(0,3)] to port blackjack_train.replay.trajectories(0,3)
-    // Iterate over ranges blackjack_train.rollout.trajectories(0,3)->[blackjack_train.replay.trajectories(0,3)] and blackjack_train.replay.trajectories(0,3).
+    // Connect blackjack_train.rollout.trajectories(0,16)->[blackjack_train.replay.trajectories(0,16)] to port blackjack_train.replay.trajectories(0,16)
+    // Iterate over ranges blackjack_train.rollout.trajectories(0,16)->[blackjack_train.replay.trajectories(0,16)] and blackjack_train.replay.trajectories(0,16).
     {
         int src_start[] =  { 0, 0 };
         int src_value[] =  { 0, 0 }; // Will be incremented.
-        int src_radixes[] = { 1, 3 };
+        int src_radixes[] = { 1, 16 };
         int src_permutation[] = { 0, 1 };
         mixed_radix_int_t src_range_mr = {
             2,
@@ -738,10 +972,10 @@ void _lf_initialize_trigger_objects() {
             src_radixes,
             src_permutation
         };
-        // Iterate over range blackjack_train.replay.trajectories(0,3).
+        // Iterate over range blackjack_train.replay.trajectories(0,16).
         {
             int range_start[] =  { 0, 0 };
-            int range_radixes[] = { 3, 1 };
+            int range_radixes[] = { 16, 1 };
             int permutation[] = { 0, 1 };
             mixed_radix_int_t range_mr = {
                 2,
@@ -749,7 +983,7 @@ void _lf_initialize_trigger_objects() {
                 range_radixes,
                 permutation
             };
-            for (int range_count = 0; range_count < 0 + 3; range_count++) {
+            for (int range_count = 0; range_count < 0 + 16; range_count++) {
                 int dst_runtime = mixed_radix_parent(&range_mr, 1); // Runtime index.
                 SUPPRESS_UNUSED_WARNING(dst_runtime);
                 int dst_channel = range_mr.digits[0]; // Channel index.
@@ -764,7 +998,7 @@ void _lf_initialize_trigger_objects() {
                 SUPPRESS_UNUSED_WARNING(src_bank);
                 blackjack_train_replay_self[dst_runtime]->_lf_trajectories[dst_channel] = (_replaybufferreactor_trajectories_t*)&blackjack_train_rollout_self[src_runtime]->_lf_trajectories;
                 mixed_radix_incr(&src_range_mr);
-                if (mixed_radix_to_int(&src_range_mr) >= 0 + 3) {
+                if (mixed_radix_to_int(&src_range_mr) >= 0 + 16) {
                     // Start over with the source.
                     for (int i = 0; i < src_range_mr.size; i++) {
                         src_range_mr.digits[i] = src_start[i];
@@ -813,8 +1047,8 @@ void _lf_initialize_trigger_objects() {
         }
     }
     // Connect inputs and outputs for reactor blackjack_train.delay.
-    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(0,1)
-    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(0,1).
+    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(0,1)
+    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(0,1).
     {
         int src_runtime = 0; // Runtime index.
         SUPPRESS_UNUSED_WARNING(src_runtime);
@@ -831,8 +1065,242 @@ void _lf_initialize_trigger_objects() {
             blackjack_train_rollout_self[dst_runtime]->_lf_gradients = (_rolloutreactor_gradients_t*)&blackjack_train_delay_self[src_runtime]->_lf_out;
         }
     }
-    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(2,1)
-    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(2,1).
+    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(15,1)
+    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(15,1).
+    {
+        int src_runtime = 0; // Runtime index.
+        SUPPRESS_UNUSED_WARNING(src_runtime);
+        int src_channel = 0; // Channel index.
+        SUPPRESS_UNUSED_WARNING(src_channel);
+        int src_bank = 0; // Bank index.
+        SUPPRESS_UNUSED_WARNING(src_bank);
+        // Iterate over range blackjack_train.rollout.gradients(15,1).
+        {
+            int dst_runtime = 15; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+            int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+            int dst_bank = 15; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+            int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+            blackjack_train_rollout_self[dst_runtime]->_lf_gradients = (_rolloutreactor_gradients_t*)&blackjack_train_delay_self[src_runtime]->_lf_out;
+        }
+    }
+    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(14,1)
+    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(14,1).
+    {
+        int src_runtime = 0; // Runtime index.
+        SUPPRESS_UNUSED_WARNING(src_runtime);
+        int src_channel = 0; // Channel index.
+        SUPPRESS_UNUSED_WARNING(src_channel);
+        int src_bank = 0; // Bank index.
+        SUPPRESS_UNUSED_WARNING(src_bank);
+        // Iterate over range blackjack_train.rollout.gradients(14,1).
+        {
+            int dst_runtime = 14; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+            int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+            int dst_bank = 14; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+            int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+            blackjack_train_rollout_self[dst_runtime]->_lf_gradients = (_rolloutreactor_gradients_t*)&blackjack_train_delay_self[src_runtime]->_lf_out;
+        }
+    }
+    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(13,1)
+    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(13,1).
+    {
+        int src_runtime = 0; // Runtime index.
+        SUPPRESS_UNUSED_WARNING(src_runtime);
+        int src_channel = 0; // Channel index.
+        SUPPRESS_UNUSED_WARNING(src_channel);
+        int src_bank = 0; // Bank index.
+        SUPPRESS_UNUSED_WARNING(src_bank);
+        // Iterate over range blackjack_train.rollout.gradients(13,1).
+        {
+            int dst_runtime = 13; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+            int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+            int dst_bank = 13; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+            int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+            blackjack_train_rollout_self[dst_runtime]->_lf_gradients = (_rolloutreactor_gradients_t*)&blackjack_train_delay_self[src_runtime]->_lf_out;
+        }
+    }
+    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(12,1)
+    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(12,1).
+    {
+        int src_runtime = 0; // Runtime index.
+        SUPPRESS_UNUSED_WARNING(src_runtime);
+        int src_channel = 0; // Channel index.
+        SUPPRESS_UNUSED_WARNING(src_channel);
+        int src_bank = 0; // Bank index.
+        SUPPRESS_UNUSED_WARNING(src_bank);
+        // Iterate over range blackjack_train.rollout.gradients(12,1).
+        {
+            int dst_runtime = 12; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+            int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+            int dst_bank = 12; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+            int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+            blackjack_train_rollout_self[dst_runtime]->_lf_gradients = (_rolloutreactor_gradients_t*)&blackjack_train_delay_self[src_runtime]->_lf_out;
+        }
+    }
+    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(11,1)
+    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(11,1).
+    {
+        int src_runtime = 0; // Runtime index.
+        SUPPRESS_UNUSED_WARNING(src_runtime);
+        int src_channel = 0; // Channel index.
+        SUPPRESS_UNUSED_WARNING(src_channel);
+        int src_bank = 0; // Bank index.
+        SUPPRESS_UNUSED_WARNING(src_bank);
+        // Iterate over range blackjack_train.rollout.gradients(11,1).
+        {
+            int dst_runtime = 11; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+            int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+            int dst_bank = 11; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+            int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+            blackjack_train_rollout_self[dst_runtime]->_lf_gradients = (_rolloutreactor_gradients_t*)&blackjack_train_delay_self[src_runtime]->_lf_out;
+        }
+    }
+    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(10,1)
+    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(10,1).
+    {
+        int src_runtime = 0; // Runtime index.
+        SUPPRESS_UNUSED_WARNING(src_runtime);
+        int src_channel = 0; // Channel index.
+        SUPPRESS_UNUSED_WARNING(src_channel);
+        int src_bank = 0; // Bank index.
+        SUPPRESS_UNUSED_WARNING(src_bank);
+        // Iterate over range blackjack_train.rollout.gradients(10,1).
+        {
+            int dst_runtime = 10; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+            int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+            int dst_bank = 10; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+            int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+            blackjack_train_rollout_self[dst_runtime]->_lf_gradients = (_rolloutreactor_gradients_t*)&blackjack_train_delay_self[src_runtime]->_lf_out;
+        }
+    }
+    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(9,1)
+    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(9,1).
+    {
+        int src_runtime = 0; // Runtime index.
+        SUPPRESS_UNUSED_WARNING(src_runtime);
+        int src_channel = 0; // Channel index.
+        SUPPRESS_UNUSED_WARNING(src_channel);
+        int src_bank = 0; // Bank index.
+        SUPPRESS_UNUSED_WARNING(src_bank);
+        // Iterate over range blackjack_train.rollout.gradients(9,1).
+        {
+            int dst_runtime = 9; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+            int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+            int dst_bank = 9; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+            int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+            blackjack_train_rollout_self[dst_runtime]->_lf_gradients = (_rolloutreactor_gradients_t*)&blackjack_train_delay_self[src_runtime]->_lf_out;
+        }
+    }
+    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(8,1)
+    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(8,1).
+    {
+        int src_runtime = 0; // Runtime index.
+        SUPPRESS_UNUSED_WARNING(src_runtime);
+        int src_channel = 0; // Channel index.
+        SUPPRESS_UNUSED_WARNING(src_channel);
+        int src_bank = 0; // Bank index.
+        SUPPRESS_UNUSED_WARNING(src_bank);
+        // Iterate over range blackjack_train.rollout.gradients(8,1).
+        {
+            int dst_runtime = 8; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+            int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+            int dst_bank = 8; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+            int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+            blackjack_train_rollout_self[dst_runtime]->_lf_gradients = (_rolloutreactor_gradients_t*)&blackjack_train_delay_self[src_runtime]->_lf_out;
+        }
+    }
+    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(7,1)
+    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(7,1).
+    {
+        int src_runtime = 0; // Runtime index.
+        SUPPRESS_UNUSED_WARNING(src_runtime);
+        int src_channel = 0; // Channel index.
+        SUPPRESS_UNUSED_WARNING(src_channel);
+        int src_bank = 0; // Bank index.
+        SUPPRESS_UNUSED_WARNING(src_bank);
+        // Iterate over range blackjack_train.rollout.gradients(7,1).
+        {
+            int dst_runtime = 7; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+            int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+            int dst_bank = 7; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+            int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+            blackjack_train_rollout_self[dst_runtime]->_lf_gradients = (_rolloutreactor_gradients_t*)&blackjack_train_delay_self[src_runtime]->_lf_out;
+        }
+    }
+    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(6,1)
+    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(6,1).
+    {
+        int src_runtime = 0; // Runtime index.
+        SUPPRESS_UNUSED_WARNING(src_runtime);
+        int src_channel = 0; // Channel index.
+        SUPPRESS_UNUSED_WARNING(src_channel);
+        int src_bank = 0; // Bank index.
+        SUPPRESS_UNUSED_WARNING(src_bank);
+        // Iterate over range blackjack_train.rollout.gradients(6,1).
+        {
+            int dst_runtime = 6; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+            int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+            int dst_bank = 6; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+            int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+            blackjack_train_rollout_self[dst_runtime]->_lf_gradients = (_rolloutreactor_gradients_t*)&blackjack_train_delay_self[src_runtime]->_lf_out;
+        }
+    }
+    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(5,1)
+    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(5,1).
+    {
+        int src_runtime = 0; // Runtime index.
+        SUPPRESS_UNUSED_WARNING(src_runtime);
+        int src_channel = 0; // Channel index.
+        SUPPRESS_UNUSED_WARNING(src_channel);
+        int src_bank = 0; // Bank index.
+        SUPPRESS_UNUSED_WARNING(src_bank);
+        // Iterate over range blackjack_train.rollout.gradients(5,1).
+        {
+            int dst_runtime = 5; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+            int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+            int dst_bank = 5; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+            int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+            blackjack_train_rollout_self[dst_runtime]->_lf_gradients = (_rolloutreactor_gradients_t*)&blackjack_train_delay_self[src_runtime]->_lf_out;
+        }
+    }
+    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(4,1)
+    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(4,1).
+    {
+        int src_runtime = 0; // Runtime index.
+        SUPPRESS_UNUSED_WARNING(src_runtime);
+        int src_channel = 0; // Channel index.
+        SUPPRESS_UNUSED_WARNING(src_channel);
+        int src_bank = 0; // Bank index.
+        SUPPRESS_UNUSED_WARNING(src_bank);
+        // Iterate over range blackjack_train.rollout.gradients(4,1).
+        {
+            int dst_runtime = 4; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+            int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+            int dst_bank = 4; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+            int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+            blackjack_train_rollout_self[dst_runtime]->_lf_gradients = (_rolloutreactor_gradients_t*)&blackjack_train_delay_self[src_runtime]->_lf_out;
+        }
+    }
+    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(3,1)
+    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(3,1).
+    {
+        int src_runtime = 0; // Runtime index.
+        SUPPRESS_UNUSED_WARNING(src_runtime);
+        int src_channel = 0; // Channel index.
+        SUPPRESS_UNUSED_WARNING(src_channel);
+        int src_bank = 0; // Bank index.
+        SUPPRESS_UNUSED_WARNING(src_bank);
+        // Iterate over range blackjack_train.rollout.gradients(3,1).
+        {
+            int dst_runtime = 3; SUPPRESS_UNUSED_WARNING(dst_runtime); // Runtime index.
+            int dst_channel = 0; SUPPRESS_UNUSED_WARNING(dst_channel); // Channel index.
+            int dst_bank = 3; SUPPRESS_UNUSED_WARNING(dst_bank); // Bank index.
+            int range_count = 0; SUPPRESS_UNUSED_WARNING(range_count);
+            blackjack_train_rollout_self[dst_runtime]->_lf_gradients = (_rolloutreactor_gradients_t*)&blackjack_train_delay_self[src_runtime]->_lf_out;
+        }
+    }
+    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(2,1)
+    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(2,1).
     {
         int src_runtime = 0; // Runtime index.
         SUPPRESS_UNUSED_WARNING(src_runtime);
@@ -849,8 +1317,8 @@ void _lf_initialize_trigger_objects() {
             blackjack_train_rollout_self[dst_runtime]->_lf_gradients = (_rolloutreactor_gradients_t*)&blackjack_train_delay_self[src_runtime]->_lf_out;
         }
     }
-    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(1,1)
-    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(1,1).
+    // Connect blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] to port blackjack_train.rollout.gradients(1,1)
+    // Iterate over ranges blackjack_train.delay.out(0,1)->[blackjack_train.rollout.gradients(0,1), blackjack_train.rollout.gradients(15,1), blackjack_train.rollout.gradients(14,1), blackjack_train.rollout.gradients(13,1), blackjack_train.rollout.gradients(12,1), blackjack_train.rollout.gradients(11,1), blackjack_train.rollout.gradients(10,1), blackjack_train.rollout.gradients(9,1), blackjack_train.rollout.gradients(8,1), blackjack_train.rollout.gradients(7,1), blackjack_train.rollout.gradients(6,1), blackjack_train.rollout.gradients(5,1), blackjack_train.rollout.gradients(4,1), blackjack_train.rollout.gradients(3,1), blackjack_train.rollout.gradients(2,1), blackjack_train.rollout.gradients(1,1)] and blackjack_train.rollout.gradients(1,1).
     {
         int src_runtime = 0; // Runtime index.
         SUPPRESS_UNUSED_WARNING(src_runtime);
@@ -868,7 +1336,7 @@ void _lf_initialize_trigger_objects() {
         }
     }
     // Reactor is a bank. Iterate over bank members.
-    for (int blackjack_train_rollout_i = 0; blackjack_train_rollout_i < 3; blackjack_train_rollout_i++) {
+    for (int blackjack_train_rollout_i = 0; blackjack_train_rollout_i < 16; blackjack_train_rollout_i++) {
     }
     {
     }
@@ -891,7 +1359,7 @@ void _lf_initialize_trigger_objects() {
     {
         int count = 0; SUPPRESS_UNUSED_WARNING(count);
         // Reactor is a bank. Iterate over bank members.
-        for (int blackjack_train_rollout_i = 0; blackjack_train_rollout_i < 3; blackjack_train_rollout_i++) {
+        for (int blackjack_train_rollout_i = 0; blackjack_train_rollout_i < 16; blackjack_train_rollout_i++) {
             // Add port blackjack_train.rollout.trajectories to array of is_present fields.
             envs[blackjack_train_main].is_present_fields[1 + count] = &blackjack_train_rollout_self[blackjack_train_rollout_i]->_lf_trajectories.is_present;
             #ifdef FEDERATED_DECENTRALIZED
@@ -905,10 +1373,10 @@ void _lf_initialize_trigger_objects() {
         int count = 0; SUPPRESS_UNUSED_WARNING(count);
         {
             // Add port blackjack_train.replay.dataset to array of is_present fields.
-            envs[blackjack_train_main].is_present_fields[4 + count] = &blackjack_train_replay_self[0]->_lf_dataset.is_present;
+            envs[blackjack_train_main].is_present_fields[17 + count] = &blackjack_train_replay_self[0]->_lf_dataset.is_present;
             #ifdef FEDERATED_DECENTRALIZED
             // Add port blackjack_train.replay.dataset to array of intended_tag fields.
-            envs[blackjack_train_main]._lf_intended_tag_fields[4 + count] = &blackjack_train_replay_self[0]->_lf_dataset.intended_tag;
+            envs[blackjack_train_main]._lf_intended_tag_fields[17 + count] = &blackjack_train_replay_self[0]->_lf_dataset.intended_tag;
             #endif // FEDERATED_DECENTRALIZED
             count++;
         }
@@ -917,10 +1385,10 @@ void _lf_initialize_trigger_objects() {
         int count = 0; SUPPRESS_UNUSED_WARNING(count);
         {
             // Add port blackjack_train.learner.gradients to array of is_present fields.
-            envs[blackjack_train_main].is_present_fields[5 + count] = &blackjack_train_learner_self[0]->_lf_gradients.is_present;
+            envs[blackjack_train_main].is_present_fields[18 + count] = &blackjack_train_learner_self[0]->_lf_gradients.is_present;
             #ifdef FEDERATED_DECENTRALIZED
             // Add port blackjack_train.learner.gradients to array of intended_tag fields.
-            envs[blackjack_train_main]._lf_intended_tag_fields[5 + count] = &blackjack_train_learner_self[0]->_lf_gradients.intended_tag;
+            envs[blackjack_train_main]._lf_intended_tag_fields[18 + count] = &blackjack_train_learner_self[0]->_lf_gradients.intended_tag;
             #endif // FEDERATED_DECENTRALIZED
             count++;
         }
@@ -930,10 +1398,10 @@ void _lf_initialize_trigger_objects() {
         // Reactor is a bank. Iterate over bank members.
         for (int blackjack_train_delay_i = 0; blackjack_train_delay_i < 1; blackjack_train_delay_i++) {
             // Add port blackjack_train.delay.out to array of is_present fields.
-            envs[blackjack_train_main].is_present_fields[6 + count] = &blackjack_train_delay_self[0]->_lf_out.is_present;
+            envs[blackjack_train_main].is_present_fields[19 + count] = &blackjack_train_delay_self[0]->_lf_out.is_present;
             #ifdef FEDERATED_DECENTRALIZED
             // Add port blackjack_train.delay.out to array of intended_tag fields.
-            envs[blackjack_train_main]._lf_intended_tag_fields[6 + count] = &blackjack_train_delay_self[0]->_lf_out.intended_tag;
+            envs[blackjack_train_main]._lf_intended_tag_fields[19 + count] = &blackjack_train_delay_self[0]->_lf_out.intended_tag;
             #endif // FEDERATED_DECENTRALIZED
             count++;
         }
@@ -944,7 +1412,7 @@ void _lf_initialize_trigger_objects() {
     
         // Set reaction priorities for ReactorInstance blackjack_train.rollout
         // Reactor is a bank. Iterate over bank members.
-        for (int blackjack_train_rollout_i = 0; blackjack_train_rollout_i < 3; blackjack_train_rollout_i++) {
+        for (int blackjack_train_rollout_i = 0; blackjack_train_rollout_i < 16; blackjack_train_rollout_i++) {
             blackjack_train_rollout_self[blackjack_train_rollout_i]->_lf__reaction_0.chain_id = 1;
             // index is the OR of level 0 and 
             // deadline 9223372036854775807 shifted left 16 bits.
@@ -999,7 +1467,7 @@ void _lf_initialize_trigger_objects() {
     
     // Initialize the scheduler
     size_t num_reactions_per_level[5] = 
-        {6, 3, 1, 1, 1};
+        {19, 16, 1, 1, 1};
     sched_params_t sched_params = (sched_params_t) {
                             .num_reactions_per_level = &num_reactions_per_level[0],
                             .num_reactions_per_level_size = (size_t) 5};
