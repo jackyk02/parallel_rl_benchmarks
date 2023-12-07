@@ -1,0 +1,75 @@
+target Python {
+  threading: True
+}
+
+preamble {=
+  import time
+  import numpy as np
+=}
+
+reactor clientReactor {
+  input global_parameters
+  output updated_parameters
+
+  reaction(startup) {=  =}
+
+  reaction(global_parameters) -> updated_parameters {=
+    time.sleep(0.5)
+    new_parameter = global_parameters.value.copy()
+    updated_parameters.set(new_parameter)
+  =}
+}
+
+reactor serverReactor {
+  output global_parameters
+  input[4] updated_parameters
+  state round_num
+  state benchmark_start_time
+  state total_start_time
+
+  reaction(startup) -> global_parameters {=
+    self.round_num = 0
+    self.results = [0] * 4
+    self.benchmark_start_time = None
+    self.total_start_time = None
+    val = np.ones(1310720)
+    global_parameters.set(val)
+  =}
+
+  reaction(updated_parameters) -> global_parameters {=
+    # Retrieve value from each client
+    for i in range(4):
+      self.results[i] = updated_parameters[i].value
+
+    # Check and set the benchmark start time for the first round
+    if self.round_num == 0:
+        self.benchmark_start_time = time.time()
+        self.total_start_time = time.time()
+
+    if self.round_num == 1000:
+        request_stop()
+
+    # Calculate the overhead time difference for the current round and reset the start time for the next round
+    current_time = time.time()
+    overhead_time = current_time - self.benchmark_start_time - 0.5
+    training_time = current_time - self.total_start_time
+    self.benchmark_start_time = current_time
+
+    # Print the overhead time and round number
+    print(f"Round: {self.round_num}")
+    print(f"Total training time: {training_time:.4f} seconds")
+    print(f"Overhead: {overhead_time:.4f} seconds \n")
+
+    self.round_num += 1
+
+    # Update the global parameters with the results from the first client for the next round
+    global_parameters.set(self.results[0].copy())
+  =}
+}
+
+main reactor {
+  client = new[4] clientReactor()
+  server = new serverReactor()
+  (server.global_parameters)+ -> client.global_parameters after 0
+  client.updated_parameters -> server.updated_parameters
+}

@@ -1,0 +1,72 @@
+target Python {
+  threading: True
+}
+
+preamble {=
+  #Import packages
+  #e.g Torch, Gym, Numpy
+=}
+
+reactor RolloutReactor {
+  input gradients
+  output trajectories
+
+  state EnvironmentState
+  state PolicyState
+  state ActionBuffer
+  state RewardBuffer
+  state ObservationBuffer
+
+  reaction(startup) {=
+    #Initialize Environment
+  =}
+
+  reaction(gradients) -> trajectories {=
+    #Perform rollouts for the Environment
+  =}
+}
+
+reactor ReplayBufferReactor {
+  input[6] trajectories
+  output dataset
+
+  state ExperienceData
+  state SamplingPointer
+  state PrioritizedInfo
+
+  reaction(startup) {=
+    #Initialize ReplayBuffer
+  =}
+
+  reaction(trajectories) -> dataset {=
+    #Append Trajectories into ReplayBuffer
+  =}
+}
+
+reactor LearnerReactor {
+  output gradients
+  input[6] dataset
+
+  state ModelParameter
+  state OptimizerState
+  state LearningRate
+  state TargetNetworkParameters
+
+  reaction(startup) -> gradients {=
+    # Initialize the policy
+  =}
+
+  reaction(dataset) -> gradients {=
+    # Update the policy
+  =}
+}
+
+main reactor {
+  rollout = new[6] RolloutReactor()
+  replay = new[6] ReplayBufferReactor()
+  learner = new[6] LearnerReactor()
+
+  (learner.gradients)+ -> rollout.gradients  # Specifiy
+  (rollout.trajectories)+ -> replay.trajectories
+  (replay.dataset)+ -> learner.dataset
+}

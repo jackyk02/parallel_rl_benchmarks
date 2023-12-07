@@ -1,0 +1,120 @@
+target Python {
+  threading: True
+}
+
+preamble {=
+  import gym
+  import torch
+  import torch.nn as nn
+  import numpy as np
+  import time
+  import logging
+  env = gym.make("ma_gym:TrafficJunction10-v1")
+  EPISODES = 10000
+  logging.basicConfig(filename="infer_log.log", level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
+  class PolicyNetwork(nn.Module):
+    def __init__(self, obs_space, action_space):
+        super(PolicyNetwork, self).__init__()
+        self.fc = nn.Linear(obs_space, 64)
+        self.action_head = nn.Linear(64, action_space)
+
+    def forward(self, x):
+        x = torch.relu(self.fc(x))
+        action_probs = torch.softmax(self.action_head(x), dim=-1)
+        return action_probs
+
+
+  def load_policy(agent_idx):
+      policy = PolicyNetwork(
+          env.observation_space[agent_idx].shape[0], env.action_space[agent_idx].n)
+      policy_load_path = f"policy_agent_{agent_idx}.pth"
+      policy.load_state_dict(torch.load(policy_load_path))
+      policy.eval()
+      return policy
+=}
+
+reactor ClientReactor {
+  input global_parameters
+  output updated_parameters
+  state agent_idx
+  state policy
+
+  reaction(startup) {=
+    self.agent_idx = self._bank_index
+    self.policy = load_policy(self.agent_idx)
+  =}
+
+  reaction(global_parameters) -> updated_parameters {=
+    val = global_parameters.value
+
+    state = torch.from_numpy(np.array(val[self.agent_idx])).float().unsqueeze(0)
+    with torch.no_grad():
+        probs = self.policy(state)
+    action = torch.argmax(probs, dim=-1)
+
+    updated_parameters.set(action.item())
+  =}
+}
+
+reactor serverReactor {
+  output global_parameters
+  input[10] updated_parameters
+  state running_reward
+  state actions
+  state round_num
+  state start_time
+
+  reaction(startup) -> global_parameters {=
+    self.env = env
+    self.round_num = 0
+    self.actions = [()] * 10
+    self.total_reward = 0
+    state_n = self.env.reset()
+    self.done_n = [False] * 10
+
+    global_parameters.set(state_n)
+  =}
+
+  reaction(updated_parameters) -> global_parameters {=
+    if all(self.done_n):
+      self.env.reset()
+      self.total_reward = 0
+
+    for i in range(10):
+        self.actions[i] = updated_parameters[i].value
+
+    next_state_n, rewards, done_n, _ = self.env.step(self.actions)
+    state_n = next_state_n
+
+    self.total_reward += sum(rewards)
+
+    # Log the time every 10,000 episodes
+    if self.round_num % 10000 == 0 and self.round_num != 0:
+        logging.info(f"Episode: {i}, Elapsed Time: {time.time() - self.start_time:.2f} seconds")
+
+    # first round
+    if self.round_num == EPISODES:
+        print(f"Total time taken: {time.time() - self.start_time:.2f} seconds")
+        request_stop()
+
+    # first round
+    if int(self.round_num) == 0:
+        self.start_time = time.time()
+
+    # print round number
+    print("Episode: "+str(self.round_num))
+    self.round_num += 1
+
+    # print running reward
+    print("Reward: " + str(self.total_reward) + " \n")
+    global_parameters.set(state_n)
+  =}
+}
+
+main reactor {
+  client = new[10] ClientReactor()
+  server = new serverReactor()
+  (server.global_parameters)+ -> client.global_parameters after 0
+  client.updated_parameters -> server.updated_parameters
+}
