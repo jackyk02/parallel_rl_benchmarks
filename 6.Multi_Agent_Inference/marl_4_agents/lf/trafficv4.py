@@ -1,3 +1,4 @@
+import random
 import logging
 import time
 import numpy as np
@@ -298,7 +299,7 @@ class __clientreactor:
         return 0
 
     def reaction_function_1(self, global_parameters, updated_parameters):
-
+        random.seed(1)
         val = global_parameters.value
 
         state = torch.from_numpy(
@@ -343,7 +344,7 @@ class __serverreactor:
         return 0
 
     def reaction_function_1(self, updated_parameters, global_parameters):
-
+        random.seed(1)
         if all(self.done_n):
             self.env.reset()
             self.total_reward = 0
@@ -351,8 +352,9 @@ class __serverreactor:
         for i in range(4):
             self.actions[i] = updated_parameters[i].value
 
-        next_state_n, rewards, done_n, _ = self.env.step(self.actions)
+        next_state_n, rewards, self.done_n, _ = self.env.step(self.actions)
         state_n = next_state_n
+        print(state_n[-1])
 
         self.total_reward += sum(rewards)
 

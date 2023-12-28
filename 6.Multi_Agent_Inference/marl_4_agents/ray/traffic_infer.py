@@ -1,3 +1,4 @@
+import random
 import logging
 import gym
 import torch
@@ -40,6 +41,7 @@ class PolicyActor:
         self.policy = load_policy(self.agent_idx)
 
     def get_action(self, state):
+        random.seed(1)
         state = torch.from_numpy(
             np.array(state[self.agent_idx])).float().unsqueeze(0)
         with torch.no_grad():
@@ -59,6 +61,7 @@ total_reward = 0
 start_time = time.time()
 
 for i in range(episode):
+    random.seed(1)
     if all(done_n):
         env.reset()
         total_reward = 0
@@ -66,6 +69,7 @@ for i in range(episode):
     action_n = ray.get(action_n)
     next_state_n, rewards, done_n, _ = env.step(action_n)
     state_n = next_state_n
+    print(state_n[-1])
 
     total_reward += sum(rewards)
 

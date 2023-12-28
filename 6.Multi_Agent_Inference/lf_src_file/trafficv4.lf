@@ -8,6 +8,7 @@ preamble {=
   import torch.nn as nn
   import numpy as np
   import time
+  import random
   import logging
   env = gym.make("ma_gym:TrafficJunction4-v1")
   EPISODES = 10000
@@ -46,6 +47,7 @@ reactor ClientReactor {
   =}
 
   reaction(global_parameters) -> updated_parameters {=
+    random.seed(1)
     val = global_parameters.value
 
     state = torch.from_numpy(np.array(val[self.agent_idx])).float().unsqueeze(0)
@@ -77,6 +79,7 @@ reactor serverReactor {
   =}
 
   reaction(updated_parameters) -> global_parameters {=
+    random.seed(1)
     if all(self.done_n):
       self.env.reset()
       self.total_reward = 0
@@ -84,7 +87,7 @@ reactor serverReactor {
     for i in range(4):
         self.actions[i] = updated_parameters[i].value
 
-    next_state_n, rewards, done_n, _ = self.env.step(self.actions)
+    next_state_n, rewards, self.done_n, _ = self.env.step(self.actions)
     state_n = next_state_n
 
     self.total_reward += sum(rewards)
