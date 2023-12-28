@@ -6,10 +6,13 @@ preamble {=
   import gym
   import numpy as np
   import time
+  import random
+  random.seed(1)
 
   # Configuration parameters
   NUM_ENVS = 15
   NUM_STEPS = 10000
+  SEED = 1
 =}
 
 reactor EnvReactor {
@@ -17,13 +20,17 @@ reactor EnvReactor {
   output infos
 
   reaction(startup) {=
+    random.seed(SEED)
     self.env = gym.make("CartPole-v1")
+    self.env.seed(SEED)
+    self.rng = np.random.RandomState(SEED)
     self.env.reset()
   =}
 
   reaction(seed) -> infos {=
-    policy = np.random.default_rng(seed.value)
-    result = self.env.step(policy.integers(0, 2))
+    random.seed(SEED)
+    action = self.rng.randint(0, 2)
+    result = self.env.step(action)
 
     if result[2] or result[3]:
         self.env.reset()
