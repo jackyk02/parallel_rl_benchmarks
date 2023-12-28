@@ -1,13 +1,15 @@
-import time
-import numpy as np
-import gym
-import copy
-import LinguaFrancasample_efficiency as lf
+import sys
+import os
 from LinguaFrancasample_efficiency import (
     Tag, action_capsule_t, port_capsule, request_stop, schedule_copy, start
 )
-import os
-import sys
+import LinguaFrancasample_efficiency as lf
+import copy
+import gym
+import numpy as np
+import time
+import random
+random.seed(1)
 sys.path.append(os.path.dirname(__file__))
 # List imported names, but do not use pylint's --extension-pkg-allow-list option
 # so that these names will be assumed present without having to compile and install.
@@ -71,7 +73,8 @@ NUM_STEPS = 10000
 
 # Configuration parameters
 NUM_ENVS = 15
-NUM_STEPS = 3000
+NUM_STEPS = 10000
+SEED = 1
 # End of preamble.
 
 
@@ -97,7 +100,8 @@ class __envreactor:
     def __init__(self, **kwargs):
         # Define parameters and their default values
         # Handle parameters that are set in instantiation
-        self.env = gym.make("Pong-v0")
+        random.seed(SEED)
+        self.env = gym.make("Pong-v4")
         self.__dict__.update(kwargs)
         # Define state variables
 
@@ -107,13 +111,14 @@ class __envreactor:
 
     def reaction_function_0(self):
 
+        self.env.seed(SEED)
+        self.rng = np.random.RandomState(SEED)
         self.env.reset()
         return 0
 
     def reaction_function_1(self, seed, infos):
-
-        np.random.seed(seed.value)
-        action = np.random.choice(self.env.action_space.n)
+        random.seed(SEED)
+        action = self.rng.choice(self.env.action_space.n)
         result = self.env.step(action)
 
         if result[2] or result[3]:
@@ -147,7 +152,7 @@ class __serverreactor:
         return 0
 
     def reaction_function_1(self, infos, seed):
-
+        random.seed(SEED)
         if self.step_num == 1:
             self.start_time = time.time()
 
@@ -163,7 +168,7 @@ class __serverreactor:
         for i in range(15):
             temp = infos[i].value
             print(
-                f"Env {i + 1}: Observations={temp[0][0][0]}, Reward={temp[1]}, Terminated={temp[2]}")
+                f"Env {i + 1}: Observations={temp[0]}, Reward={temp[1]}, Terminated={temp[2]}")
 
         print("\n")
 

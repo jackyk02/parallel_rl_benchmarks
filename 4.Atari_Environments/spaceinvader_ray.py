@@ -1,17 +1,19 @@
-import ray
-import gym
-import numpy as np
-import time
 import os
+import time
+import numpy as np
+import gym
+import ray
+import random
+random.seed(1)
 os.environ['OPENBLAS_NUM_THREADS'] = '1'
-
 
 # Initialize Ray without logging.
 ray.init(configure_logging=False, log_to_driver=False)
 
 # Configuration parameters
 NUM_ENVS = 15
-NUM_STEPS = 1000
+NUM_STEPS = 10000
+SEED = 1
 
 
 @ray.remote
@@ -21,19 +23,22 @@ class RolloutWorker:
     """
 
     def __init__(self):
+        random.seed(SEED)
         self.env = gym.make("SpaceInvaders-v4")
-        self.env.reset(seed=123, options={})
+        self.env.seed(SEED)
+        self.rng = np.random.RandomState(SEED)
+        self.env.reset()
 
     def step(self, seed):
         """
         Takes a step in the environment using a random policy based on the provided seed.
         """
-        np.random.seed(seed)
-        action = np.random.choice(self.env.action_space.n)
+        random.seed(SEED)
+        action = self.rng.randint(0, 2)
         result = self.env.step(action)
 
         if result[2] or result[3]:
-            self.env.reset(seed=123, options={})
+            self.env.reset()
 
         return result
 
@@ -43,6 +48,7 @@ envs = [RolloutWorker.remote() for _ in range(NUM_ENVS)]
 start_time = None
 
 for step_num in range(NUM_STEPS):
+    random.seed(SEED)
     if step_num == 1:
         start_time = time.time()
 
@@ -52,7 +58,7 @@ for step_num in range(NUM_STEPS):
 
     for i, (new_observations, reward, terminated, info) in enumerate(results):
         print(
-            f"Env {i + 1}: Observations={new_observations[0][0]}, Reward={reward}, Terminated={terminated}")
+            f"Env {i + 1}: Observations={new_observations}, Reward={reward}, Terminated={terminated}")
     print("\n")
 
 end_time = time.time()
