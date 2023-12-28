@@ -50,6 +50,7 @@ class PolicyActor:
         return action.item()
 
 
+random.seed(1)
 env = gym.make('ma_gym:TrafficJunction4-v1')
 n_agents = env.n_agents
 actor_handles = [PolicyActor.remote(i) for i in range(n_agents)]

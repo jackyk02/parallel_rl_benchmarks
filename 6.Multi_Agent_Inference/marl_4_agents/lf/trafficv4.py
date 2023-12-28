@@ -146,6 +146,7 @@ def load_policy(agent_idx):
 
 # End of preamble.
 # From the preamble, verbatim:
+random.seed(1)
 env = gym.make("ma_gym:TrafficJunction4-v1")
 EPISODES = 10000
 logging.basicConfig(filename="infer_log.log", level=logging.INFO,
