@@ -5,6 +5,7 @@ import torch.nn as nn
 import numpy as np
 import time
 import ray
+import random
 
 ray.init()
 
@@ -40,6 +41,7 @@ class PolicyActor:
         self.policy = load_policy(self.agent_idx)
 
     def get_action(self, state):
+        random.seed(1)
         state = torch.from_numpy(
             np.array(state[self.agent_idx])).float().unsqueeze(0)
         with torch.no_grad():
@@ -48,6 +50,7 @@ class PolicyActor:
         return action.item()
 
 
+random.seed(1)
 env = gym.make('ma_gym:TrafficJunction10-v1')
 n_agents = env.n_agents
 actor_handles = [PolicyActor.remote(i) for i in range(n_agents)]
@@ -59,6 +62,7 @@ total_reward = 0
 start_time = time.time()
 
 for i in range(episode):
+    random.seed(1)
     if all(done_n):
         env.reset()
         total_reward = 0
@@ -66,6 +70,7 @@ for i in range(episode):
     action_n = ray.get(action_n)
     next_state_n, rewards, done_n, _ = env.step(action_n)
     state_n = next_state_n
+    print(action_n)
 
     total_reward += sum(rewards)
 

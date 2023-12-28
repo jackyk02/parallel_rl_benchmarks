@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch
 import gym
 import copy
+import random
 import LinguaFrancatrafficv10 as lf
 from LinguaFrancatrafficv10 import (
     Tag, action_capsule_t, port_capsule, request_stop, schedule_copy, start
@@ -232,6 +233,7 @@ def load_policy(agent_idx):
 
 # End of preamble.
 # From the preamble, verbatim:
+random.seed(1)
 env = gym.make("ma_gym:TrafficJunction10-v1")
 EPISODES = 100000
 logging.basicConfig(filename="infer_log.log", level=logging.INFO,
@@ -298,7 +300,7 @@ class __clientreactor:
         return 0
 
     def reaction_function_1(self, global_parameters, updated_parameters):
-
+        random.seed(1)
         val = global_parameters.value
 
         state = torch.from_numpy(
@@ -343,7 +345,7 @@ class __serverreactor:
         return 0
 
     def reaction_function_1(self, updated_parameters, global_parameters):
-
+        random.seed(1)
         if all(self.done_n):
             self.env.reset()
             self.total_reward = 0
@@ -351,8 +353,9 @@ class __serverreactor:
         for i in range(10):
             self.actions[i] = updated_parameters[i].value
 
-        next_state_n, rewards, done_n, _ = self.env.step(self.actions)
+        next_state_n, rewards, self.done_n, _ = self.env.step(self.actions)
         state_n = next_state_n
+        print(self.actions)
 
         self.total_reward += sum(rewards)
 
