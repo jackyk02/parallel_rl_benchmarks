@@ -1,13 +1,15 @@
-import time
-import numpy as np
-import gym
-import copy
-import LinguaFrancasample_efficiency as lf
+import sys
+import os
 from LinguaFrancasample_efficiency import (
     Tag, action_capsule_t, port_capsule, request_stop, schedule_copy, start
 )
-import os
-import sys
+import LinguaFrancasample_efficiency as lf
+import copy
+import gym
+import numpy as np
+import time
+import random
+random.seed(1)
 sys.path.append(os.path.dirname(__file__))
 # List imported names, but do not use pylint's --extension-pkg-allow-list option
 # so that these names will be assumed present without having to compile and install.
@@ -72,6 +74,7 @@ NUM_STEPS = 10000
 # Configuration parameters
 NUM_ENVS = 15
 NUM_STEPS = 10000
+SEED = 1
 # End of preamble.
 
 
@@ -97,6 +100,7 @@ class __envreactor:
     def __init__(self, **kwargs):
         # Define parameters and their default values
         # Handle parameters that are set in instantiation
+        random.seed(SEED)
         self.env = gym.make("CartPole-v1")
         self.__dict__.update(kwargs)
         # Define state variables
@@ -107,13 +111,15 @@ class __envreactor:
 
     def reaction_function_0(self):
 
+        self.env.seed(SEED)
+        self.rng = np.random.RandomState(SEED)
         self.env.reset()
         return 0
 
     def reaction_function_1(self, seed, infos):
-
-        policy = np.random.default_rng(seed.value)
-        result = self.env.step(policy.integers(0, 2))
+        random.seed(SEED)
+        action = self.rng.randint(0, 2)
+        result = self.env.step(action)
 
         if result[2] or result[3]:
             self.env.reset()
@@ -146,7 +152,7 @@ class __serverreactor:
         return 0
 
     def reaction_function_1(self, infos, seed):
-
+        random.seed(SEED)
         if self.step_num == 1:
             self.start_time = time.time()
 
