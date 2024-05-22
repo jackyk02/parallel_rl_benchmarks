@@ -18,7 +18,7 @@ The repository includes the following folders and files:
 
 ## Install
 
-You can simplify reproduction using an OS virtualization environment with Docker.
+Reproduce the benchmarks using an OS virtualization environment with Docker.
 
 ### Build the Docker image
 
