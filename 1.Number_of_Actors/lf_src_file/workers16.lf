@@ -1,5 +1,5 @@
 target Python {
-  threading: True,
+  single-threaded: false
   workers: 32
 }
 

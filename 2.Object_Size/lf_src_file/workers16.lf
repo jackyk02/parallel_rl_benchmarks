@@ -1,6 +1,5 @@
 target Python {
-  threading: True,
-  workers: 32
+  single-threaded: false
 }
 
 preamble {=
