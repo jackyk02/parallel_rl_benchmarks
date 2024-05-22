@@ -26,7 +26,7 @@ You can simplify reproduction using an OS virtualization environment with Docker
 docker build -t parallel_rl_benchmarks`
 ```
 
-## Running the Benchmarks
+### Running the Benchmarks
 
 ```
 docker run parallel_rl_benchmarks
