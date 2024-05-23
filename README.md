@@ -23,7 +23,7 @@ Reproduce the benchmarks using an OS virtualization environment with Docker.
 ### Build the Docker image
 
 ```
-docker build -t parallel_rl_benchmarks`
+docker build -t parallel_rl_benchmarks .
 ```
 
 ### Running the Benchmarks
